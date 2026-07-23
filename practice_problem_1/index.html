@@ -889,7 +889,7 @@
   <div class="ai-warning-bar">
     <div class="warning-content">
       <span class="warning-icon"></span>
-      <span class="warning-text">
+      <span class="warning-text" id="warning-text-span">
         DO NOT USE AI TO SOLVE THIS PRACTICE PROBLEM SET. IF YOU DO, <span class="warning-highlight">YOU ARE NOT
           PRACTICING BUT AI IS PRACTICING</span>. BE AHEAD OF AI!
       </span>
@@ -903,20 +903,28 @@
     <aside class="sidebar">
       <div class="sidebar-header" style="display: flex; flex-direction: column; gap: 0.75rem;">
         <div style="display: flex; justify-content: space-between; align-items: center; gap: 0.5rem;">
-          <h1>Practice Problem Set 1</h1>
-          <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle Theme"
-            style="background: none; border: 1px solid var(--border-dark); border-radius: 8px; padding: 0.5rem; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; transition: all 0.2s ease; flex-shrink: 0;">
-            <svg id="theme-toggle-icon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"
-              stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-            </svg>
-          </button>
+          <h1 id="sidebar-title">Practice Problem Set 1</h1>
+          <div style="display: flex; gap: 0.5rem; align-items: center;">
+            <!-- Language Toggle Button -->
+            <button id="lang-toggle" class="theme-toggle-btn" aria-label="Toggle Language"
+              style="background: none; border: 1px solid var(--border-dark); border-radius: 8px; padding: 0.25rem 0.5rem; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center; height: 36px; transition: all 0.2s ease; flex-shrink: 0; font-size: 0.8rem; font-weight: 700; gap: 4px;">
+              🌐 <span id="lang-toggle-text">বাংলা</span>
+            </button>
+
+            <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle Theme"
+              style="background: none; border: 1px solid var(--border-dark); border-radius: 8px; padding: 0.5rem; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; transition: all 0.2s ease; flex-shrink: 0;">
+              <svg id="theme-toggle-icon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+              </svg>
+            </button>
+          </div>
         </div>
 
         <!-- Progress Indicator -->
         <div class="progress-widget">
           <div class="progress-info">
-            <span>Overall Progress</span>
+            <span id="progress-title">Overall Progress</span>
             <span id="progress-text">0/10 Solved</span>
           </div>
           <div class="progress-bar-container">
@@ -927,12 +935,12 @@
 
       <!-- Problems List -->
       <nav class="nav-list">
-        <div class="nav-section-title">Syntax Diagnostics</div>
+        <div class="nav-section-title" id="sec-title-syntax">Syntax Diagnostics</div>
         <ul id="syntax-questions-list" style="list-style: none; display: flex; flex-direction: column; gap: 0.25rem;">
           <!-- Dynamically filled -->
         </ul>
 
-        <div class="nav-section-title">Programming Problems</div>
+        <div class="nav-section-title" id="sec-title-coding">Programming Problems</div>
         <ul id="coding-problems-list" style="list-style: none; display: flex; flex-direction: column; gap: 0.25rem;">
           <!-- Dynamically filled -->
         </ul>
@@ -965,43 +973,119 @@
     // Configuration to hide syntax program corrections (set to false to reveal all corrections)
     const HIDE_CORRECTIONS = true;
 
+    // Translation dictionary for bilingual support
+    const translations = {
+      en: {
+        warningText: 'DO NOT USE AI TO SOLVE THIS PRACTICE PROBLEM SET. IF YOU DO, <span class="warning-highlight">YOU ARE NOT PRACTICING BUT AI IS PRACTICING</span>. BE AHEAD OF AI!',
+        overallProgress: 'Overall Progress',
+        solved: 'Solved',
+        syntaxTitle: 'Syntax Diagnostics',
+        codingTitle: 'Programming Problems',
+        footerText: '&copy; 2026 C Programming Practice Suite. Remember: The only way to learn programming is to write code yourself. Stay sharp.',
+        selectProblem: 'Select a practice problem from the sidebar to begin.',
+        markSolved: 'Mark as Solved',
+        programCode: 'Program Code',
+        syntaxHintReview: '💡 Review the code lines below and try to find all errors yourself.',
+        syntaxHintClick: '💡 Click on any line of code to inspect it for errors.',
+        checkCorrections: 'Check Program Corrections',
+        hideCorrections: 'Hide Corrections',
+        expectedCorrections: 'Expected Corrections',
+        correctProgramSuccess: '✅ This C program compiles and runs correctly with zero errors!',
+        lineCol: 'Line',
+        errorFoundCol: 'Error Found',
+        suggestedCorrectionCol: 'Suggested Correction',
+        formulaTitle: 'Formula',
+        inputSpecTitle: 'Input Specification',
+        outputSpecTitle: 'Output Specification',
+        sampleTestCasesTitle: 'Sample Test Cases',
+        inputLabel: 'Input',
+        expectedOutputLabel: 'Expected Output',
+        copyBtn: 'Copy',
+        copiedBtn: 'Copied!',
+        sidebarTitle: 'Practice Problem Set 1',
+        debugType: 'Debug',
+        codeType: 'Code',
+        difficultyEasy: 'Easy',
+        difficultyMedium: 'Medium',
+        difficultyChallenge: 'Challenge'
+      },
+      bn: {
+        warningText: 'এই প্র্যাকটিস প্রবলেমগুলো সমাধান করার জন্য AI ব্যবহার করবেন না। যদি করেন, <span class="warning-highlight">তাহলে আপনি প্র্যাকটিস করছেন না, বরং AI প্র্যাকটিস করছে</span>। AI-এর চেয়ে এগিয়ে থাকুন!',
+        overallProgress: 'সর্বমোট অগ্রগতি',
+        solved: 'টি সমাধান করা হয়েছে',
+        syntaxTitle: 'সিনট্যাক্স ডায়াগনস্টিকস',
+        codingTitle: 'প্রোগ্রামিং সমস্যাসমূহ',
+        footerText: '&copy; 2026 C প্রোগ্রামিং প্র্যাকটিস স্যুইট। মনে রাখবেন: প্রোগ্রামিং শেখার একমাত্র উপায় হলো নিজে কোড লেখা। ধারালো থাকুন।',
+        selectProblem: 'শুরু করতে সাইডবার থেকে একটি সমস্যা নির্বাচন করুন।',
+        markSolved: 'সমাধান করা হয়েছে হিসেবে চিহ্নিত করুন',
+        programCode: 'প্রোগ্রাম কোড',
+        syntaxHintReview: '💡 নিচের কোডের লাইনগুলো লক্ষ্য করুন এবং নিজেই সব ভুল খুঁজে বের করার চেষ্টা করুন।',
+        syntaxHintClick: '💡 কোডের যেকোনো লাইনের ওপর ক্লিক করে তার ভুলগুলো পরীক্ষা করুন।',
+        checkCorrections: 'সংশোধনসমূহ দেখুন',
+        hideCorrections: 'সংশোধনসমূহ লুকান',
+        expectedCorrections: 'প্রত্যাশিত সংশোধনসমূহ',
+        correctProgramSuccess: '✅ এই C প্রোগ্রামটি কোনো ত্রুটি ছাড়াই সফলভাবে কম্পাইল এবং রান হয়!',
+        lineCol: 'লাইন',
+        errorFoundCol: 'ত্রুটি',
+        suggestedCorrectionCol: 'প্রস্তাবিত সংশোধন',
+        formulaTitle: 'সূত্র',
+        inputSpecTitle: 'ইনপুট স্পেসিফিকেশন',
+        outputSpecTitle: 'আউটপুট স্পেসিফিকেশন',
+        sampleTestCasesTitle: 'নমুনা টেস্ট কেস (Sample Test Cases)',
+        inputLabel: 'ইনপুট',
+        expectedOutputLabel: 'প্রত্যাশিত আউটপুট',
+        copyBtn: 'কপি করুন',
+        copiedBtn: 'কপি হয়েছে!',
+        sidebarTitle: 'প্র্যাকটিস প্রবলেম সেট ১',
+        debugType: 'ডিবাগ',
+        codeType: 'কোড',
+        difficultyEasy: 'সহজ',
+        difficultyMedium: 'মাঝারি',
+        difficultyChallenge: 'চ্যালেঞ্জ'
+      }
+    };
+
     // Problem Data Definition
     const problems = [
       // ----------------- SYNTAX DIAGNOSTICS (QUESTIONS 1-5) -----------------
       {
         id: "q1",
         type: "syntax",
-        title: "Question 1 — Find the 3 Errors",
+        title_en: "Question 1 — Find the Errors",
+        title_bn: "প্রশ্ন ১ — ত্রুটিগুলো খুঁজে বের করুন",
         difficulty: "easy",
         difficultyStars: "⭐",
-        description: "Review the C program below. Find the three syntax/compilation errors that prevent it from compiling or running correctly.",
+        description_en: "Review the C program below. Find the syntax/compilation errors (if any), or check if the program is completely correct with zero errors.",
+        description_bn: "নিচের C প্রোগ্রামটি লক্ষ্য করুন। কোনো সিনট্যাক্স/কম্পাইলেশন ভুল থাকলে তা খুঁজে বের করুন, অথবা প্রোগ্রামটিতে কোনো ভুল না থাকলে তা সঠিক হিসেবে যাচাই করুন।",
         codeLines: [
-          { num: 1, text: `<span class="c-kw">#include</span> <span class="c-str">&lt;studio.h&gt;</span>`, hasError: true, errorTitle: "Wrong Header File", errorDesc: "The standard Input/Output library header is stdio.h, not studio.h.", correction: "#include &lt;stdio.h&gt;" },
+          { num: 1, text: `<span class="c-kw">#include</span> <span class="c-str">&lt;studio.h&gt;</span>`, hasError: true, errorTitle_en: "Wrong Header File", errorTitle_bn: "ভুল হেডার ফাইল", errorDesc_en: "The standard Input/Output library header is stdio.h, not studio.h.", errorDesc_bn: "Standard Input/Output লাইব্রেরি হেডারটি হলো stdio.h, studio.h নয়।", correction: "#include &lt;stdio.h&gt;" },
           { num: 2, text: "" },
           { num: 3, text: `<span class="c-ty">int</span> <span class="c-fn">main</span>()` },
           { num: 4, text: `{` },
           { num: 5, text: `    <span class="c-ty">int</span> a, b;` },
           { num: 6, text: "" },
-          { num: 7, text: `    <span class="c-fn">scanf</span>(<span class="c-str">"%d %d"</span>, a, &amp;b);`, hasError: true, errorTitle: "Missing Address-of Operator", errorDesc: "scanf requires the memory addresses of variables to store inputs. Use &amp;a to supply the address of variable 'a'.", correction: "scanf(\"%d %d\", &amp;a, &amp;b);" },
+          { num: 7, text: `    <span class="c-fn">scanf</span>(<span class="c-str">"%d %d"</span>, a, &amp;b);`, hasError: true, errorTitle_en: "Missing Address-of Operator", errorTitle_bn: "Address-of (&) অপারেটর নেই", errorDesc_en: "scanf requires the memory addresses of variables to store inputs. Use &amp;a to supply the address of variable 'a'.", errorDesc_bn: "scanf-এ ইনপুট নেওয়ার জন্য ভেরিয়েবলের মেমরি অ্যাড্রেস প্রয়োজন। 'a' ভেরিয়েবলের অ্যাড্রেস দিতে &a ব্যবহার করুন।", correction: "scanf(\"%d %d\", &amp;a, &amp;b);" },
           { num: 8, text: "" },
           { num: 9, text: `    <span class="c-fn">printf</span>(<span class="c-str">"Sum = %d"</span>, a + b);` },
           { num: 10, text: "" },
-          { num: 11, text: `    <span class="c-kw">return</span> <span class="c-num">0</span>`, hasError: true, errorTitle: "Missing Semicolon", errorDesc: "In C, statements must be terminated with a semicolon.", correction: "return 0;" },
+          { num: 11, text: `    <span class="c-kw">return</span> <span class="c-num">0</span>`, hasError: true, errorTitle_en: "Missing Semicolon", errorTitle_bn: "সেমিকোলন (;) নেই", errorDesc_en: "In C, statements must be terminated with a semicolon.", errorDesc_bn: "C প্রোগ্রামে স্টেটমেন্ট শেষ করার জন্য সেমিকোলন ব্যবহার করতে হয়।", correction: "return 0;" },
           { num: 12, text: `}` }
         ],
         corrections: [
-          { line: 1, error: "Wrong header file", correction: "#include &lt;stdio.h&gt;" },
-          { line: 7, error: "Missing & before variable 'a'", correction: "scanf(\"%d %d\", &amp;a, &amp;b);" },
-          { line: 11, error: "Missing semicolon", correction: "return 0;" }
+          { line: 1, error_en: "Wrong header file", error_bn: "ভুল হেডার ফাইল", correction: "#include &lt;stdio.h&gt;" },
+          { line: 7, error_en: "Missing & before variable 'a'", error_bn: "ভেরিয়েবল 'a'-এর পূর্বে & অপারেটর নেই", correction: "scanf(\"%d %d\", &amp;a, &amp;b);" },
+          { line: 11, error_en: "Missing semicolon", error_bn: "সেমিকোলন (;) নেই", correction: "return 0;" }
         ]
       },
       {
         id: "q2",
         type: "syntax",
-        title: "Question 2 — Verify Correctness",
+        title_en: "Question 2 — Find the Errors",
+        title_bn: "প্রশ্ন ২ — ত্রুটিগুলো খুঁজে বের করুন",
         difficulty: "easy",
         difficultyStars: "⭐",
-        description: "Review this program. Identify if there are any errors or if the syntax is completely correct.",
+        description_en: "Review the C program below. Find the syntax/compilation errors (if any), or check if the program is completely correct with zero errors.",
+        description_bn: "নিচের C প্রোগ্রামটি লক্ষ্য করুন। কোনো সিনট্যাক্স/কম্পাইলেশন ভুল থাকলে তা খুঁজে বের করুন, অথবা প্রোগ্রামটিতে কোনো ভুল না থাকলে তা সঠিক হিসেবে যাচাই করুন।",
         codeLines: [
           { num: 1, text: `<span class="c-kw">#include</span> <span class="c-str">&lt;stdio.h&gt;</span>` },
           { num: 2, text: "" },
@@ -1025,36 +1109,40 @@
       {
         id: "q3",
         type: "syntax",
-        title: "Question 3 — Find the 2 Errors",
+        title_en: "Question 3 — Find the Errors",
+        title_bn: "প্রশ্ন ৩ — ত্রুটিগুলো খুঁজে বের করুন",
         difficulty: "easy",
         difficultyStars: "⭐",
-        description: "This basic float input-output program contains 2 syntax errors. Click on the code lines to inspect or use the button below to check your analysis.",
+        description_en: "Review the C program below. Find the syntax/compilation errors (if any), or check if the program is completely correct with zero errors.",
+        description_bn: "নিচের C প্রোগ্রামটি লক্ষ্য করুন। কোনো সিনট্যাক্স/কম্পাইলেশন ভুল থাকলে তা খুঁজে বের করুন, অথবা প্রোগ্রামটিতে কোনো ভুল না থাকলে তা সঠিক হিসেবে যাচাই করুন।",
         codeLines: [
           { num: 1, text: `<span class="c-kw">#include</span> <span class="c-str">&lt;stdio.h&gt;</span>` },
           { num: 2, text: "" },
-          { num: 3, text: `<span class="c-ty">int</span> <span class="c-fn">main</span>`, hasError: true, errorTitle: "Missing Parentheses", errorDesc: "The entrypoint function main must be declared with parentheses main() to denote it is a function.", correction: "int main()" },
+          { num: 3, text: `<span class="c-ty">int</span> <span class="c-fn">main</span>`, hasError: true, errorTitle_en: "Missing Parentheses", errorTitle_bn: "প্যারেন্থেসিস (বন্ধনী) নেই", errorDesc_en: "The entrypoint function main must be declared with parentheses main() to denote it is a function.", errorDesc_bn: "main ফাংশনটি ব্যবহারের জন্য main() এভাবে বন্ধনীসহ লিখতে হবে।", correction: "int main()" },
           { num: 4, text: `{` },
           { num: 5, text: `    <span class="c-ty">float</span> price;` },
           { num: 6, text: "" },
           { num: 7, text: `    <span class="c-fn">scanf</span>(<span class="c-str">"%f"</span>, &amp;price);` },
           { num: 8, text: "" },
-          { num: 9, text: `    <span class="c-fn">printf</span>(<span class="c-str">"%d"</span>, price);`, hasError: true, errorTitle: "Wrong Format Specifier", errorDesc: "The variable 'price' is of type float, but the format specifier %d (used for integers) is used. Use %f for decimal floats.", correction: "printf(\"%f\", price);" },
+          { num: 9, text: `    <span class="c-fn">printf</span>(<span class="c-str">"%d"</span>, price);`, hasError: true, errorTitle_en: "Wrong Format Specifier", errorTitle_bn: "ভুল ফরম্যাট স্পেসিফায়ার", errorDesc_en: "The variable 'price' is of type float, but the format specifier %d (used for integers) is used. Use %f for decimal floats.", errorDesc_bn: "'price' ভেরিয়েবলটি float টাইপের, কিন্তু প্রিন্ট করার জন্য %d (যা ইন্টিজারের জন্য) ব্যবহার করা হয়েছে। দশমিক ফ্লোটের জন্য %f ব্যবহার করুন।", correction: "printf(\"%f\", price);" },
           { num: 10, text: "" },
           { num: 11, text: `    <span class="c-kw">return</span> <span class="c-num">0</span>;` },
           { num: 12, text: `}` }
         ],
         corrections: [
-          { line: 3, error: "Missing parentheses on main function", correction: "int main()" },
-          { line: 9, error: "Wrong format specifier for float variable", correction: "printf(\"%f\", price);" }
+          { line: 3, error_en: "Missing parentheses on main function", error_bn: "main ফাংশনে বন্ধনী নেই", correction: "int main()" },
+          { line: 9, error_en: "Wrong format specifier for float variable", error_bn: "ফ্লোট ভেরিয়েবলের জন্য ভুল ফরম্যাট স্পেসিফায়ার", correction: "printf(\"%f\", price);" }
         ]
       },
       {
         id: "q4",
         type: "syntax",
-        title: "Question 4 — Find the 2 Errors",
+        title_en: "Question 4 — Find the Errors",
+        title_bn: "প্রশ্ন ৪ — ত্রুটিগুলো খুঁজে বের করুন",
         difficulty: "easy",
         difficultyStars: "⭐",
-        description: "Examine this basic initialization program. Find the 2 syntax/logical errors.",
+        description_en: "Review the C program below. Find the syntax/compilation errors (if any), or check if the program is completely correct with zero errors.",
+        description_bn: "নিচের C প্রোগ্রামটি লক্ষ্য করুন। কোনো সিনট্যাক্স/কম্পাইলেশন ভুল থাকলে তা খুঁজে বের করুন, অথবা প্রোগ্রামটিতে কোনো ভুল না থাকলে তা সঠিক হিসেবে যাচাই করুন।",
         codeLines: [
           { num: 1, text: `<span class="c-kw">#include</span> <span class="c-str">&lt;stdio.h&gt;</span>` },
           { num: 2, text: "" },
@@ -1062,45 +1150,47 @@
           { num: 4, text: `{` },
           { num: 5, text: `    <span class="c-ty">int</span> a;` },
           { num: 6, text: "" },
-          { num: 7, text: `    a == <span class="c-num">4</span>;`, hasError: true, errorTitle: "Comparison Instead of Assignment", errorDesc: "The double equals sign '==' checks for equality. For assigning a value to a variable, use the single equals sign '='.", correction: "a = 4;" },
+          { num: 7, text: `    a == <span class="c-num">4</span>;`, hasError: true, errorTitle_en: "Comparison Instead of Assignment", errorTitle_bn: "অ্যাসাইনমেন্টের পরিবর্তে কম্প্যারিসন অপারেটর", errorDesc_en: "The double equals sign '==' checks for equality. For assigning a value to a variable, use the single equals sign '='.", errorDesc_bn: "ডাবল ইকুয়াল '==' দিয়ে সমতা চেক করা হয়। ভেরিয়েবলে মান রাখার (assign করার) জন্য সিঙ্গেল ইকুয়াল '=' ব্যবহার করুন।", correction: "a = 4;" },
           { num: 8, text: "" },
-          { num: 9, text: `    <span class="c-fn">printf</span>(<span class="c-str">"Value of a = %d"</span>, a)`, hasError: true, errorTitle: "Missing Semicolon", errorDesc: "This statement is missing a terminating semicolon.", correction: "printf(\"Value of a = %d\", a);" },
+          { num: 9, text: `    <span class="c-fn">printf</span>(<span class="c-str">"Value of a = %d"</span>, a)`, hasError: true, errorTitle_en: "Missing Semicolon", errorTitle_bn: "সেমিকোলন (;) নেই", errorDesc_en: "This statement is missing a terminating semicolon.", errorDesc_bn: "এই স্টেটমেন্টের শেষে সেমিকোলন নেই।", correction: "printf(\"Value of a = %d\", a);" },
           { num: 10, text: "" },
           { num: 11, text: `    <span class="c-kw">return</span> <span class="c-num">0</span>;` },
           { num: 12, text: `}` }
         ],
         corrections: [
-          { line: 7, error: "Comparison operator (==) used instead of assignment operator (=)", correction: "a = 4;" },
-          { line: 9, error: "Missing semicolon at the end of the line", correction: "printf(\"Value of a = %d\", a);" }
+          { line: 7, error_en: "Comparison operator (==) used instead of assignment operator (=)", error_bn: "অ্যাসাইনমেন্টের (=) জায়গায় কম্প্যারিসন (==) ব্যবহার করা হয়েছে", correction: "a = 4;" },
+          { line: 9, error_en: "Missing semicolon at the end of the line", error_bn: "লাইনের শেষে সেমিকোলন (;) নেই", correction: "printf(\"Value of a = %d\", a);" }
         ]
       },
       {
         id: "q5",
         type: "syntax",
-        title: "Question 5 — Challenge (5 Errors)",
+        title_en: "Question 5 — Find the Errors (Challenge)",
+        title_bn: "প্রশ্ন ৫ — ত্রুটিগুলো খুঁজে বের করুন (চ্যালেঞ্জ)",
         difficulty: "challenge",
         difficultyStars: "⭐⭐⭐",
-        description: "This code is riddled with issues. Carefully evaluate the code block to spot all 5 compilation/logic errors.",
+        description_en: "Review the C program below. Find the syntax/compilation errors (if any), or check if the program is completely correct with zero errors.",
+        description_bn: "নিচের C প্রোগ্রামটি লক্ষ্য করুন। কোনো সিনট্যাক্স/কম্পাইলেশন ভুল থাকলে তা খুঁজে বের করুন, অথবা প্রোগ্রামটিতে কোনো ভুল না থাকলে তা সঠিক হিসেবে যাচাই করুন।",
         codeLines: [
-          { num: 1, text: `<span class="c-kw">#include</span> <span class="c-str">&lt;studio.h&gt;</span>`, hasError: true, errorTitle: "Wrong Header File", errorDesc: "The standard output/input library is 'stdio.h', not 'studio.h'.", correction: "#include &lt;stdio.h&gt;" },
+          { num: 1, text: `<span class="c-kw">#include</span> <span class="c-str">&lt;studio.h&gt;</span>`, hasError: true, errorTitle_en: "Wrong Header File", errorTitle_bn: "ভুল হেডার ফাইল", errorDesc_en: "The standard output/input library is 'stdio.h', not 'studio.h'.", errorDesc_bn: "Standard Input/Output লাইব্রেরিটি হলো stdio.h, studio.h নয়।", correction: "#include &lt;stdio.h&gt;" },
           { num: 2, text: "" },
-          { num: 3, text: `<span class="c-ty">int</span> <span class="c-fn">main</span>`, hasError: true, errorTitle: "Missing Parentheses", errorDesc: "The main function signature must include parentheses main().", correction: "int main()" },
+          { num: 3, text: `<span class="c-ty">int</span> <span class="c-fn">main</span>`, hasError: true, errorTitle_en: "Missing Parentheses", errorTitle_bn: "প্যারেন্থেসিস (বন্ধনী) নেই", errorDesc_en: "The main function signature must include parentheses main().", errorDesc_bn: "main ফাংশনে অবশ্যই main() এভাবে বন্ধনী থাকতে হবে।", correction: "int main()" },
           { num: 4, text: `{` },
           { num: 5, text: `    <span class="c-ty">float</span> x, y;` },
           { num: 6, text: "" },
-          { num: 7, text: `    <span class="c-fn">scanf</span>(<span class="c-str">"%f %f"</span>, x, y);`, hasError: true, errorTitle: "Missing Address-of Operator (&)", errorDesc: "scanf requires the variables to be preceded by '&' to supply their memory addresses.", correction: "scanf(\"%f %f\", &amp;x, &amp;y);" },
+          { num: 7, text: `    <span class="c-fn">scanf</span>(<span class="c-str">"%f %f"</span>, x, y);`, hasError: true, errorTitle_en: "Missing Address-of Operator (&)", errorTitle_bn: "Address-of (&) অপারেটর নেই", errorDesc_en: "scanf requires the variables to be preceded by '&' to supply their memory addresses.", errorDesc_bn: "scanf-এ ইনপুট নেওয়ার জন্য ভেরিয়েবলের নামের আগে অবশ্যই '&' বসাতে হবে।", correction: "scanf(\"%f %f\", &amp;x, &amp;y);" },
           { num: 8, text: "" },
-          { num: 9, text: `    <span class="c-fn">printf</span>(<span class="c-str">"Total = %d\\n"</span>, x + y)`, hasError: true, errorTitle: "Wrong Format Specifier & Semicolon", errorDesc: "First, x+y is a float sum, so it requires %f (or similar) instead of %d. Second, the line is missing a closing semicolon.", correction: "printf(\"Total = %f\\n\", x + y);" },
+          { num: 9, text: `    <span class="c-fn">printf</span>(<span class="c-str">"Total = %d\\n"</span>, x + y)`, hasError: true, errorTitle_en: "Wrong Format Specifier & Semicolon", errorTitle_bn: "ভুল ফরম্যাট স্পেসিফায়ার ও সেমিকোলন নেই", errorDesc_en: "First, x+y is a float sum, so it requires %f (or similar) instead of %d. Second, the line is missing a closing semicolon.", errorDesc_bn: "প্রথমত, x+y এর যোগফল একটি float টাইপ মান, তাই এখানে %d এর জায়গায় %f ব্যবহার করতে হবে। দ্বিতীয়ত, লাইনের শেষে সেমিকোলন দেওয়া হয়নি।", correction: "printf(\"Total = %f\\n\", x + y);" },
           { num: 10, text: "" },
-          { num: 11, text: `    <span class="c-kw">return</span> <span class="c-num">0</span>`, hasError: true, errorTitle: "Missing Semicolon", errorDesc: "The return statement lacks a terminating semicolon.", correction: "return 0;" },
+          { num: 11, text: `    <span class="c-kw">return</span> <span class="c-num">0</span>`, hasError: true, errorTitle_en: "Missing Semicolon", errorTitle_bn: "সেমিকোলন (;) নেই", errorDesc_en: "The return statement lacks a terminating semicolon.", errorDesc_bn: "রিটার্ন স্টেটমেন্টের শেষে সেমিকোলন দেওয়া হয়নি।", correction: "return 0;" },
           { num: 12, text: `}` }
         ],
         corrections: [
-          { line: 1, error: "Wrong header file", correction: "#include &lt;stdio.h&gt;" },
-          { line: 3, error: "Missing parentheses on main function", correction: "int main()" },
-          { line: 7, error: "Missing & in scanf for both variables 'x' and 'y'", correction: "scanf(\"%f %f\", &amp;x, &amp;y);" },
-          { line: 9, error: "Wrong format specifier (%d instead of %f) and missing semicolon at the end of the line", correction: "printf(\"Total = %f\\n\", x + y);" },
-          { line: 11, error: "Missing semicolon after return value", correction: "return 0;" }
+          { line: 1, error_en: "Wrong header file", error_bn: "ভুল হেডার ফাইল", correction: "#include &lt;stdio.h&gt;" },
+          { line: 3, error_en: "Missing parentheses on main function", error_bn: "main ফাংশনে বন্ধনী নেই", correction: "int main()" },
+          { line: 7, error_en: "Missing & in scanf for both variables 'x' and 'y'", error_bn: "scanf-এ উভয় ভেরিয়েবল 'x' এবং 'y'-এর জন্য & নেই", correction: "scanf(\"%f %f\", &amp;x, &amp;y);" },
+          { line: 9, error_en: "Wrong format specifier (%d instead of %f) and missing semicolon at the end of the line", error_bn: "ভুল ফরম্যাট স্পেসিফায়ার (%d-এর বদলে %f) এবং লাইনের শেষে সেমিকোলন নেই", correction: "printf(\"Total = %f\\n\", x + y);" },
+          { line: 11, error_en: "Missing semicolon after return value", error_bn: "রিটার্ন স্টেটমেন্টের শেষে সেমিকোলন (;) নেই", correction: "return 0;" }
         ]
       },
 
@@ -1108,12 +1198,16 @@
       {
         id: "p1",
         type: "coding",
-        title: "Problem 1 — Sum of Two Numbers",
+        title_en: "Problem 1 — Sum of Two Numbers",
+        title_bn: "সমস্যা ১ — দুটি সংখ্যার যোগফল",
         difficulty: "easy",
         difficultyStars: "⭐ (Very Easy)",
-        description: "Write a C program that takes two integers as input, computes their addition, and prints the resulting sum.",
-        inputDesc: "Two integers A and B separated by space.",
-        outputDesc: "Print the sum of A and B.",
+        description_en: "Write a C program that takes two integers as input, computes their addition, and prints the resulting sum.",
+        description_bn: "এমন একটি C প্রোগ্রাম লিখুন যা দুটি পূর্ণসংখ্যা (integer) ইনপুট হিসেবে নিবে এবং তাদের যোগফল প্রিন্ট করবে।",
+        inputDesc_en: "Two integers A and B separated by space.",
+        inputDesc_bn: "স্পেস দিয়ে আলাদা করা দুটি পূর্ণসংখ্যা A এবং B।",
+        outputDesc_en: "Print the sum of A and B.",
+        outputDesc_bn: "A এবং B এর যোগফল প্রিন্ট করুন।",
         testCases: [
           { input: "10 20", output: "30" },
           { input: "-5 15", output: "10" },
@@ -1123,13 +1217,17 @@
       {
         id: "p2",
         type: "coding",
-        title: "Problem 2 — Rectangle Area and Perimeter",
+        title_en: "Problem 2 — Rectangle Area and Perimeter",
+        title_bn: "সমস্যা ২ — আয়তক্ষেত্রের ক্ষেত্রফল ও পরিসীমা",
         difficulty: "medium",
         difficultyStars: "⭐⭐",
-        description: "Given the length and width of a rectangle, calculate both the Area and Perimeter.",
+        description_en: "Given the length and width of a rectangle, calculate both the Area and Perimeter.",
+        description_bn: "একটি আয়তক্ষেত্রের দৈর্ঘ্য এবং প্রস্থ দেওয়া হলে, এর ক্ষেত্রফল (Area) এবং পরিসীমা (Perimeter) হিসাব করুন।",
         formula: "Area = Length &times; Width \nPerimeter = 2 &times; (Length + Width)",
-        inputDesc: "Two integers representing Length and Width respectively.",
-        outputDesc: "Print the area and perimeter on separate lines formatted as: \nArea = [Value]\nPerimeter = [Value]",
+        inputDesc_en: "Two integers representing Length and Width respectively.",
+        inputDesc_bn: "যথাক্রমে দৈর্ঘ্য এবং প্রস্থ নির্দেশকারী দুটি পূর্ণসংখ্যা।",
+        outputDesc_en: "Print the area and perimeter on separate lines formatted as: \nArea = [Value]\nPerimeter = [Value]",
+        outputDesc_bn: "ক্ষেত্রফল এবং পরিসীমা আলাদা লাইনে নিচের ফরম্যাটে প্রিন্ট করুন: \nArea = [মান]\nPerimeter = [মান]",
         testCases: [
           { input: "8 5", output: "Area = 40\nPerimeter = 26" },
           { input: "10 10", output: "Area = 100\nPerimeter = 40" },
@@ -1139,13 +1237,17 @@
       {
         id: "p3",
         type: "coding",
-        title: "Problem 3 — Circle Measurements",
+        title_en: "Problem 3 — Circle Measurements",
+        title_bn: "সমস্যা ৩ — বৃত্তের পরিমাপ",
         difficulty: "medium",
         difficultyStars: "⭐⭐",
-        description: "Take the radius of a circle and calculate its Diameter, Circumference, and Area. Use &pi; = 3.1416.",
+        description_en: "Take the radius of a circle and calculate its Diameter, Circumference, and Area. Use &pi; = 3.1416.",
+        description_bn: "একটি বৃত্তের ব্যাসার্ধ (radius) ইনপুট নিয়ে তার ব্যাস (Diameter), পরিধি (Circumference) এবং ক্ষেত্রফল (Area) হিসাব করুন। মান হিসেবে &pi; = 3.1416 ব্যবহার করুন।",
         formula: "Diameter = 2 &times; r\nCircumference = 2 &times; &pi; &times; r\nArea = &pi; &times; r&sup2;",
-        inputDesc: "An integer representing the radius r of the circle.",
-        outputDesc: "Print Diameter, Circumference, and Area, formatted to 2 decimal places.",
+        inputDesc_en: "An integer representing the radius r of the circle.",
+        inputDesc_bn: "বৃত্তের ব্যাসার্ধ r নির্দেশকারী একটি পূর্ণসংখ্যা।",
+        outputDesc_en: "Print Diameter, Circumference, and Area, formatted to 2 decimal places.",
+        outputDesc_bn: "ব্যাস, পরিধি এবং ক্ষেত্রফল দশমিকের পর ২ ঘর পর্যন্ত প্রিন্ট করুন।",
         testCases: [
           { input: "5", output: "Diameter = 10.00\nCircumference = 31.42\nArea = 78.54" },
           { input: "7", output: "Diameter = 14.00\nCircumference = 43.98\nArea = 153.94" },
@@ -1155,13 +1257,17 @@
       {
         id: "p4",
         type: "coding",
-        title: "Problem 4 — Celsius to Fahrenheit",
+        title_en: "Problem 4 — Celsius to Fahrenheit",
+        title_bn: "সমস্যা ৪ — সেলসিয়াস থেকে ফারেনহাইট",
         difficulty: "easy",
         difficultyStars: "⭐",
-        description: "Convert a temperature value given in Celsius scale into its Fahrenheit equivalent.",
+        description_en: "Convert a temperature value given in Celsius scale into its Fahrenheit equivalent.",
+        description_bn: "সেলসিয়াস স্কেলে দেওয়া একটি তাপমাত্রা ফারেনহাইট স্কেলে রূপান্তর করুন।",
         formula: "F = (C &times; 9 / 5) + 32",
-        inputDesc: "A floating-point or integer value representing temperature in Celsius.",
-        outputDesc: "Print the temperature in Fahrenheit formatted to 2 decimal places.",
+        inputDesc_en: "A floating-point or integer value representing temperature in Celsius.",
+        inputDesc_bn: "হেলসিয়াসে তাপমাত্রা নির্দেশকারী একটি ফ্লোটিং-পয়েন্ট বা পূর্ণসংখ্যা।",
+        outputDesc_en: "Print the temperature in Fahrenheit formatted to 2 decimal places.",
+        outputDesc_bn: "ফারেনহাইটে তাপমাত্রা দশমিকের পর ২ ঘর পর্যন্ত প্রিন্ট করুন।",
         testCases: [
           { input: "25", output: "77.00" },
           { input: "0", output: "32.00" },
@@ -1171,12 +1277,16 @@
       {
         id: "p5",
         type: "coding",
-        title: "Problem 5 — Student Marks",
+        title_en: "Problem 5 — Student Marks",
+        title_bn: "সমস্যা ৫ — শিক্ষার্থীর প্রাপ্ত নম্বর",
         difficulty: "medium",
         difficultyStars: "⭐⭐",
-        description: "A student has scores in three subjects. Accept these three marks as input, and calculate their total and average score.",
-        inputDesc: "Three space-separated integers representing marks in subject 1, 2, and 3.",
-        outputDesc: "Print the Total marks (integer) and the Average marks (rounded to 2 decimal places).",
+        description_en: "A student has scores in three subjects. Accept these three marks as input, and calculate their total and average score.",
+        description_bn: "একজন শিক্ষার্থীর তিনটি বিষয়ের নম্বর ইনপুট হিসেবে নিয়ে তার মোট নম্বর এবং গড় নম্বর হিসাব করুন।",
+        inputDesc_en: "Three space-separated integers representing marks in subject 1, 2, and 3.",
+        inputDesc_bn: "তিনটি বিষয়ের নম্বর নির্দেশকারী স্পেস দ্বারা আলাদা করা তিনটি পূর্ণসংখ্যা।",
+        outputDesc_en: "Print the Total marks (integer) and the Average marks (rounded to 2 decimal places).",
+        outputDesc_bn: "মোট নম্বর (পূর্ণসংখ্যা) এবং গড় নম্বর (দশমিকের পর ২ ঘর পর্যন্ত) প্রিন্ট করুন।",
         testCases: [
           { input: "80 75 90", output: "Total = 245\nAverage = 81.67" },
           { input: "100 100 100", output: "Total = 300\nAverage = 100.00" },
@@ -1185,11 +1295,13 @@
       }
     ];
 
-    // Local Storage Progress State Key
+    // Local Storage Progress State Keys
     const STORAGE_KEY = "c_practice_progress_state_v1";
+    const LANG_STORAGE_KEY = "c_practice_lang_state_v1";
 
-    // Load or initialize progress
+    // Load or initialize state
     let progressState = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+    let currentLang = localStorage.getItem(LANG_STORAGE_KEY) || "en";
 
     // DOM Elements
     const syntaxListEl = document.getElementById("syntax-questions-list");
@@ -1197,6 +1309,8 @@
     const problemCardEl = document.getElementById("problem-card");
     const progressTextEl = document.getElementById("progress-text");
     const progressBarEl = document.getElementById("progress-bar");
+    const langToggleBtn = document.getElementById("lang-toggle");
+    const langToggleText = document.getElementById("lang-toggle-text");
 
     let activeProblemId = null;
 
@@ -1228,7 +1342,12 @@
     function updateProgressUI() {
       const solvedCount = Object.keys(progressState).length;
       const totalCount = problems.length;
-      progressTextEl.textContent = `${solvedCount}/${totalCount} Solved`;
+      const solvedText = translations[currentLang].solved;
+      if (currentLang === "en") {
+        progressTextEl.textContent = `${solvedCount}/${totalCount} ${solvedText}`;
+      } else {
+        progressTextEl.textContent = `${totalCount}টির মধ্যে ${solvedCount}${solvedText}`;
+      }
       const percentage = (solvedCount / totalCount) * 100;
       progressBarEl.style.width = `${percentage}%`;
     }
@@ -1245,14 +1364,20 @@
         if (progressState[prob.id] === "solved") {
           li.classList.add("completed");
         }
+        if (activeProblemId === prob.id) {
+          li.classList.add("active");
+        }
+
+        const title = currentLang === "en" ? prob.title_en : prob.title_bn;
+        const typeText = prob.type === 'syntax' ? translations[currentLang].debugType : translations[currentLang].codeType;
 
         li.innerHTML = `
           <div class="nav-item-left">
             <div class="status-dot"></div>
-            <span class="nav-item-title">${prob.title}</span>
+            <span class="nav-item-title">${title}</span>
           </div>
           <span style="font-size: 0.7rem; opacity: 0.5;">
-            ${prob.type === 'syntax' ? 'Debug' : 'Code'}
+            ${typeText}
           </span>
         `;
 
@@ -1284,19 +1409,29 @@
       const isChecked = progressState[id] === "solved" ? "checked" : "";
 
       let badgeClass = "badge-easy";
-      if (prob.difficulty === "medium") badgeClass = "badge-medium";
-      if (prob.difficulty === "challenge") badgeClass = "badge-challenge";
+      let difficultyText = translations[currentLang].difficultyEasy;
+      if (prob.difficulty === "medium") {
+        badgeClass = "badge-medium";
+        difficultyText = translations[currentLang].difficultyMedium;
+      }
+      if (prob.difficulty === "challenge") {
+        badgeClass = "badge-challenge";
+        difficultyText = translations[currentLang].difficultyChallenge;
+      }
+
+      const title = currentLang === "en" ? prob.title_en : prob.title_bn;
+      const description = currentLang === "en" ? prob.description_en : prob.description_bn;
 
       let mainHTML = `
         <div class="problem-header">
           <div class="problem-title-area">
-            <h2>${prob.title}</h2>
-            <span class="difficulty-badge ${badgeClass}">${prob.difficultyStars}</span>
+            <h2>${title}</h2>
+            <span class="difficulty-badge ${badgeClass}">${prob.difficultyStars} (${difficultyText})</span>
           </div>
           <div class="status-picker">
             <label>
               <input type="checkbox" id="mark-solved-chk" ${isChecked} onchange="handleMarkSolved('${prob.id}')">
-              Mark as Solved
+              ${translations[currentLang].markSolved}
             </label>
           </div>
         </div>
@@ -1304,59 +1439,67 @@
 
       if (prob.type === "syntax") {
         // --- SYNTAX/DEBUG LAYOUT ---
+        const syntaxHint = HIDE_CORRECTIONS ? translations[currentLang].syntaxHintReview : translations[currentLang].syntaxHintClick;
         mainHTML += `
-          <p class="description">${prob.description}</p>
+          <p class="description">${description}</p>
           
-          <div class="section-title">Program Code</div>
+          <div class="section-title">${translations[currentLang].programCode}</div>
           <p style="color: var(--text-dark); font-size: 0.8rem; margin-bottom: 0.5rem; font-style: italic;">
-            ${HIDE_CORRECTIONS ? '💡 Review the code lines below and try to find all errors yourself.' : '💡 Click on any line of code to inspect it for errors.'}
+            ${syntaxHint}
           </p>
 
           <div class="interactive-code-container ${HIDE_CORRECTIONS ? 'corrections-hidden' : ''}" id="code-container">
-            ${prob.codeLines.map((line, idx) => `
-              <div class="interactive-code-line" onclick="toggleLineError(${idx}, this)" data-error="${line.hasError ? 'true' : 'false'}">
-                <div class="line-number">${line.num}</div>
-                <div class="line-content">${line.text}</div>
-              </div>
-              ${!HIDE_CORRECTIONS && line.hasError ? `
-                <div class="error-tooltip" id="err-tip-${idx}" style="display: none;">
-                  <div class="err-title">⚠️ Error: ${line.errorTitle}</div>
-                  <div class="err-desc">${line.errorDesc}</div>
-                  <div class="err-correction"><strong>Correction:</strong> <code>${line.correction}</code></div>
+            ${prob.codeLines.map((line, idx) => {
+              const errTitle = currentLang === "en" ? line.errorTitle_en : line.errorTitle_bn;
+              const errDesc = currentLang === "en" ? line.errorDesc_en : line.errorDesc_bn;
+              return `
+                <div class="interactive-code-line" onclick="toggleLineError(${idx}, this)" data-error="${line.hasError ? 'true' : 'false'}">
+                  <div class="line-number">${line.num}</div>
+                  <div class="line-content">${line.text}</div>
                 </div>
-              ` : ''}
-            `).join('')}
+                ${!HIDE_CORRECTIONS && line.hasError ? `
+                  <div class="error-tooltip" id="err-tip-${idx}" style="display: none;">
+                    <div class="err-title">⚠️ ${currentLang === "en" ? "Error" : "ত্রুটি"}: ${errTitle}</div>
+                    <div class="err-desc">${errDesc}</div>
+                    <div class="err-correction"><strong>${currentLang === "en" ? "Correction" : "সংশোধন"}:</strong> <code>${line.correction}</code></div>
+                  </div>
+                ` : ''}
+              `;
+            }).join('')}
           </div>
 
           ${HIDE_CORRECTIONS ? '' : `
           <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
-            <button class="btn-action" onclick="revealAllDiagnostics('${prob.id}')">Check Program Corrections</button>
-            ${prob.correctProgram ? '' : `<button class="btn-action btn-secondary" onclick="resetDiagnostics()">Hide Corrections</button>`}
+            <button class="btn-action" onclick="revealAllDiagnostics('${prob.id}')">${translations[currentLang].checkCorrections}</button>
+            ${prob.correctProgram ? '' : `<button class="btn-action btn-secondary" onclick="resetDiagnostics()">${translations[currentLang].hideCorrections}</button>`}
           </div>
 
           <div class="corrections-table-container" id="corrections-table-container">
-            <div class="section-title">Expected Corrections</div>
+            <div class="section-title">${translations[currentLang].expectedCorrections}</div>
             ${prob.correctProgram ? `
               <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid var(--success); padding: 1rem; border-radius: 8px; color: var(--success); font-weight: 600;">
-                ✅ This C program compiles and runs correctly with zero errors!
+                ${translations[currentLang].correctProgramSuccess}
               </div>
             ` : `
               <table class="corrections-table">
                 <thead>
                   <tr>
-                    <th style="width: 10%;">Line</th>
-                    <th style="width: 45%;">Error Found</th>
-                    <th style="width: 45%;">Suggested Correction</th>
+                    <th style="width: 10%;">${translations[currentLang].lineCol}</th>
+                    <th style="width: 45%;">${translations[currentLang].errorFoundCol}</th>
+                    <th style="width: 45%;">${translations[currentLang].suggestedCorrectionCol}</th>
                   </tr>
                 </thead>
                 <tbody>
-                  ${prob.corrections.map(c => `
-                    <tr>
-                      <td class="col-line">${c.line}</td>
-                      <td>${c.error}</td>
-                      <td class="col-correction"><code>${c.correction}</code></td>
-                    </tr>
-                  `).join('')}
+                  ${prob.corrections.map(c => {
+                    const errorMsg = currentLang === "en" ? c.error_en : c.error_bn;
+                    return `
+                      <tr>
+                        <td class="col-line">${c.line}</td>
+                        <td>${errorMsg}</td>
+                        <td class="col-correction"><code>${c.correction}</code></td>
+                      </tr>
+                    `;
+                  }).join('')}
                 </tbody>
               </table>
             `}
@@ -1366,45 +1509,48 @@
       } else {
         // --- CODING PROBLEM LAYOUT ---
         const formulaBlock = prob.formula ? `
-          <div class="section-title">Formula</div>
+          <div class="section-title">${translations[currentLang].formulaTitle}</div>
           <div class="formula-box">${prob.formula.replace(/\n/g, '<br>')}</div>
         ` : '';
 
+        const inputDesc = currentLang === "en" ? prob.inputDesc_en : prob.inputDesc_bn;
+        const outputDesc = currentLang === "en" ? prob.outputDesc_en : prob.outputDesc_bn;
+
         mainHTML += `
-          <p class="description">${prob.description}</p>
+          <p class="description">${description}</p>
           ${formulaBlock}
 
           <div class="io-grid">
             <div class="io-card">
-              <div class="io-card-title">Input Specification</div>
-              <p style="font-size: 0.95rem; line-height: 1.5; color: var(--text-main);">${prob.inputDesc}</p>
+              <div class="io-card-title">${translations[currentLang].inputSpecTitle}</div>
+              <p style="font-size: 0.95rem; line-height: 1.5; color: var(--text-main);">${inputDesc}</p>
             </div>
             <div class="io-card">
-              <div class="io-card-title">Output Specification</div>
-              <p style="font-size: 0.95rem; line-height: 1.5; color: var(--text-main);">${prob.outputDesc}</p>
+              <div class="io-card-title">${translations[currentLang].outputSpecTitle}</div>
+              <p style="font-size: 0.95rem; line-height: 1.5; color: var(--text-main);">${outputDesc}</p>
             </div>
           </div>
 
-          <div class="section-title">Sample Test Cases</div>
+          <div class="section-title">${translations[currentLang].sampleTestCasesTitle}</div>
           <div style="display: flex; flex-direction: column; gap: 1.25rem;">
             ${prob.testCases.map((tc, index) => `
               <div style="background: rgba(0,0,0,0.15); border: 1px solid var(--border-dark); border-radius: 12px; padding: 1.25rem;">
                 <div style="font-size: 0.8rem; font-weight: 800; color: var(--accent-secondary); margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 0.5rem;">
                   <span style="display: inline-block; width: 6px; height: 6px; background-color: var(--accent-secondary); border-radius: 50%;"></span>
-                  Test Case ${index + 1}
+                  ${currentLang === "en" ? `Test Case ${index + 1}` : `টেস্ট কেস ${index + 1}`}
                 </div>
                 <div class="io-grid" style="margin-bottom: 0;">
                   <div class="io-card">
                     <div class="io-card-title">
-                      Input
-                      <button class="btn-copy" onclick="copyText('sample-in-${prob.id}-${index}')">Copy</button>
+                      ${translations[currentLang].inputLabel}
+                      <button class="btn-copy" onclick="copyText('sample-in-${prob.id}-${index}')">${translations[currentLang].copyBtn}</button>
                     </div>
                     <pre class="code-block" id="sample-in-${prob.id}-${index}">${tc.input}</pre>
                   </div>
                   <div class="io-card">
                     <div class="io-card-title">
-                      Expected Output
-                      <button class="btn-copy" onclick="copyText('sample-out-${prob.id}-${index}')">Copy</button>
+                      ${translations[currentLang].expectedOutputLabel}
+                      <button class="btn-copy" onclick="copyText('sample-out-${prob.id}-${index}')">${translations[currentLang].copyBtn}</button>
                     </div>
                     <pre class="code-block" id="sample-out-${prob.id}-${index}">${tc.output}</pre>
                   </div>
@@ -1513,7 +1659,7 @@
         const btn = el.previousElementSibling.querySelector(".btn-copy");
         if (btn) {
           const original = btn.textContent;
-          btn.textContent = "Copied!";
+          btn.textContent = translations[currentLang].copiedBtn;
           btn.style.color = "var(--success)";
           setTimeout(() => {
             btn.textContent = original;
@@ -1569,13 +1715,70 @@
       }
     }
 
-    // Start App
-    function init() {
+    // Language Toggle logic
+    langToggleBtn.addEventListener("click", () => {
+      currentLang = currentLang === "en" ? "bn" : "en";
+      localStorage.setItem(LANG_STORAGE_KEY, currentLang);
+      applyLanguage(currentLang);
+    });
+
+    function applyLanguage(lang) {
+      // 1. Update toggle button text
+      langToggleText.textContent = lang === "en" ? "বাংলা" : "English";
+
+      // 2. Update warning bar
+      const warningTextEl = document.getElementById("warning-text-span");
+      if (warningTextEl) {
+        warningTextEl.innerHTML = translations[lang].warningText;
+      }
+
+      // 3. Update sidebar header title
+      const sidebarTitleEl = document.getElementById("sidebar-title");
+      if (sidebarTitleEl) {
+        sidebarTitleEl.textContent = translations[lang].sidebarTitle;
+      }
+
+      // 4. Update overall progress text and titles
+      const progressTitleEl = document.getElementById("progress-title");
+      if (progressTitleEl) {
+        progressTitleEl.textContent = translations[lang].overallProgress;
+      }
+
+      const secTitleSyntaxEl = document.getElementById("sec-title-syntax");
+      if (secTitleSyntaxEl) {
+        secTitleSyntaxEl.textContent = translations[lang].syntaxTitle;
+      }
+
+      const secTitleCodingEl = document.getElementById("sec-title-coding");
+      if (secTitleCodingEl) {
+        secTitleCodingEl.textContent = translations[lang].codingTitle;
+      }
+
+      // 5. Update footer text
+      const footerEl = document.querySelector("footer");
+      if (footerEl) {
+        footerEl.innerHTML = translations[lang].footerText;
+      }
+
+      // 6. Rerender sidebar items
       renderSidebar();
+
+      // 7. Update progress UI (numbers)
       updateProgressUI();
 
-      // Auto-select first syntax question
-      if (problems.length > 0) {
+      // 8. Rerender active problem card if it is set
+      if (activeProblemId) {
+        selectProblem(activeProblemId);
+      }
+    }
+
+    // Start App
+    function init() {
+      // Apply translation settings
+      applyLanguage(currentLang);
+
+      // Auto-select first syntax question if none is active
+      if (!activeProblemId && problems.length > 0) {
         selectProblem(problems[0].id);
       }
     }
