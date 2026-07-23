@@ -1,0 +1,1587 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Practice Problem Set 1 - Be Ahead of AI</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <style>
+    :root {
+      /* Light Theme (Default) */
+      --bg-dark: #f8fafc;
+      --panel-dark: #ffffff;
+      --card-dark: #f1f5f9;
+      --border-dark: #cbd5e1;
+
+      --accent-primary: #6d28d9;
+      --accent-primary-glow: rgba(109, 40, 217, 0.15);
+      --accent-secondary: #0891b2;
+      --accent-secondary-glow: rgba(8, 145, 178, 0.15);
+
+      --success: #10b981;
+      --success-glow: rgba(16, 185, 129, 0.2);
+      --warning: #f59e0b;
+      --warning-glow: rgba(245, 158, 11, 0.2);
+      --danger: #ef4444;
+      --danger-glow: rgba(239, 68, 68, 0.2);
+
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --text-dark: #94a3b8;
+
+      --code-bg: #f3f4f6;
+      --code-keyword: #be185d;
+      --code-type: #2563eb;
+      --code-function: #059669;
+      --code-string: #d97706;
+      --code-comment: #6b7280;
+      --code-number: #7c3aed;
+
+      --line-hover: rgba(109, 40, 217, 0.05);
+      --line-num-bg: rgba(0, 0, 0, 0.03);
+    }
+
+    [data-theme="dark"] {
+      /* Dark Theme Variables */
+      --bg-dark: #090a0f;
+      --panel-dark: #12131a;
+      --card-dark: #1a1c26;
+      --border-dark: #2a2d3d;
+
+      --accent-primary: #8b5cf6;
+      --accent-primary-glow: rgba(139, 92, 246, 0.3);
+      --accent-secondary: #06b6d4;
+      --accent-secondary-glow: rgba(6, 182, 212, 0.3);
+
+      --success: #10b981;
+      --success-glow: rgba(16, 185, 129, 0.2);
+      --warning: #f59e0b;
+      --warning-glow: rgba(245, 158, 11, 0.2);
+      --danger: #ef4444;
+      --danger-glow: rgba(239, 68, 68, 0.2);
+
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --text-dark: #6b7280;
+
+      --code-bg: #0f1015;
+      --code-keyword: #ff79c6;
+      --code-type: #8be9fd;
+      --code-function: #50fa7b;
+      --code-string: #f1fa8c;
+      --code-comment: #6272a4;
+      --code-number: #bd93f9;
+
+      --line-hover: rgba(255, 255, 255, 0.05);
+      --line-num-bg: rgba(0, 0, 0, 0.2);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg-dark);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border-dark);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--accent-primary);
+    }
+
+    /* Warning Top Bar */
+    .ai-warning-bar {
+      background: linear-gradient(90deg, #b91c1c, #7f1d1d, #4c0519);
+      border-bottom: 2px solid #ef4444;
+      padding: 1rem 2rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(239, 68, 68, 0.2);
+      animation: pulseWarning 4s infinite alternate;
+      z-index: 10;
+    }
+
+    @keyframes pulseWarning {
+      0% {
+        box-shadow: 0 4px 15px rgba(239, 68, 68, 0.2);
+      }
+
+      100% {
+        box-shadow: 0 4px 30px rgba(239, 68, 68, 0.45);
+      }
+    }
+
+    .ai-warning-bar::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 50%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+      animation: sweep 6s infinite linear;
+    }
+
+    @keyframes sweep {
+      0% {
+        left: -100%;
+      }
+
+      100% {
+        left: 200%;
+      }
+    }
+
+    .warning-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+    }
+
+    .warning-icon {
+      font-size: 1.5rem;
+      animation: bounceIcon 1s infinite alternate;
+    }
+
+    @keyframes bounceIcon {
+      0% {
+        transform: scale(1);
+      }
+
+      100% {
+        transform: scale(1.15);
+      }
+    }
+
+    .warning-text {
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      font-size: 1rem;
+      color: #fff;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    }
+
+    .warning-highlight {
+      color: #fca5a5;
+      text-decoration: underline;
+      font-weight: 900;
+    }
+
+    /* Main Layout */
+    .app-container {
+      display: flex;
+      flex: 1;
+      height: calc(100vh - 60px);
+      position: relative;
+    }
+
+    /* Sidebar styles */
+    .sidebar {
+      width: 320px;
+      background-color: var(--panel-dark);
+      border-right: 1px solid var(--border-dark);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      overflow-y: auto;
+    }
+
+    .sidebar-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--border-dark);
+    }
+
+    .sidebar-header h1 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--text-main);
+      background: linear-gradient(135deg, var(--text-main), var(--text-muted));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .theme-toggle-btn:hover {
+      background-color: var(--card-dark) !important;
+      color: var(--text-main) !important;
+    }
+
+    /* Progress Widget */
+    .progress-widget {
+      background: var(--card-dark);
+      border: 1px solid var(--border-dark);
+      border-radius: 12px;
+      padding: 1rem;
+      margin-top: 1rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .progress-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .progress-bar-container {
+      height: 8px;
+      background: var(--border-dark);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+      transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 0 8px var(--accent-primary-glow);
+    }
+
+    /* Navigation List */
+    .nav-list {
+      list-style: none;
+      padding: 1rem 0.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .nav-section-title {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--text-dark);
+      letter-spacing: 1px;
+      margin: 1rem 0.75rem 0.5rem 0.75rem;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+      color: var(--text-muted);
+    }
+
+    .nav-item:hover {
+      background-color: var(--card-dark);
+      color: var(--text-main);
+      transform: translateX(4px);
+    }
+
+    .nav-item.active {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(6, 182, 212, 0.05));
+      border-color: var(--accent-primary);
+      color: var(--accent-primary);
+      font-weight: 700;
+      box-shadow: inset 0 0 12px rgba(139, 92, 246, 0.05);
+    }
+
+    .nav-item-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      overflow: hidden;
+    }
+
+    .nav-item-title {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: 0.9rem;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: var(--border-dark);
+      flex-shrink: 0;
+      transition: all 0.2s ease;
+    }
+
+    .nav-item.completed .status-dot {
+      background-color: var(--success);
+      box-shadow: 0 0 6px var(--success);
+    }
+
+    .nav-item.in-progress .status-dot {
+      background-color: var(--warning);
+      box-shadow: 0 0 6px var(--warning);
+    }
+
+    /* Main Content Area */
+    .content-area {
+      flex: 1;
+      padding: 2rem;
+      overflow-y: auto;
+      display: flex;
+      justify-content: center;
+    }
+
+    .problem-wrapper {
+      max-width: 900px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    /* Card Details */
+    .problem-card {
+      background-color: var(--panel-dark);
+      border: 1px solid var(--border-dark);
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      animation: fadeIn 0.4s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .problem-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 1px solid var(--border-dark);
+      padding-bottom: 1.5rem;
+      margin-bottom: 1.5rem;
+      gap: 1rem;
+    }
+
+    .problem-title-area h2 {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 0.5rem;
+    }
+
+    .difficulty-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .badge-easy {
+      background-color: rgba(16, 185, 129, 0.15);
+      color: var(--success);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .badge-medium {
+      background-color: rgba(245, 158, 11, 0.15);
+      color: var(--warning);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+
+    .badge-challenge {
+      background-color: rgba(239, 68, 68, 0.15);
+      color: var(--danger);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    /* Actions Header */
+    .status-picker {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: var(--card-dark);
+      padding: 0.5rem 1rem;
+      border-radius: 10px;
+      border: 1px solid var(--border-dark);
+    }
+
+    .status-picker label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .status-picker input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--success);
+      cursor: pointer;
+    }
+
+    /* Problem content structure */
+    .section-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin: 1.5rem 0 0.75rem 0;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .section-title::before {
+      content: '';
+      display: inline-block;
+      width: 4px;
+      height: 16px;
+      background-color: var(--accent-primary);
+      border-radius: 2px;
+    }
+
+    p.description {
+      line-height: 1.6;
+      color: var(--text-main);
+      font-size: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .formula-box {
+      background: linear-gradient(135deg, rgba(6, 182, 212, 0.1), rgba(139, 92, 246, 0.05));
+      border: 1px solid rgba(6, 182, 212, 0.2);
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+      font-family: 'Fira Code', monospace;
+      color: var(--accent-secondary);
+    }
+
+    /* IO Grid */
+    .io-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .io-card {
+      background-color: var(--code-bg);
+      border: 1px solid var(--border-dark);
+      border-radius: 8px;
+      padding: 1rem;
+      position: relative;
+    }
+
+    .io-card-title {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 0.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .btn-copy {
+      background: none;
+      border: none;
+      color: var(--accent-secondary);
+      font-size: 0.75rem;
+      cursor: pointer;
+      font-weight: 600;
+      transition: color 0.2s ease;
+    }
+
+    .btn-copy:hover {
+      color: var(--text-main);
+    }
+
+    pre.code-block {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.9rem;
+      color: var(--text-main);
+      white-space: pre-wrap;
+      word-break: break-all;
+      line-height: 1.5;
+    }
+
+    /* Tab Layout for Interactive Coding Section */
+    .tabs-container {
+      margin-top: 2rem;
+      background: var(--card-dark);
+      border: 1px solid var(--border-dark);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .tabs-header {
+      display: flex;
+      background: rgba(0, 0, 0, 0.2);
+      border-bottom: 1px solid var(--border-dark);
+    }
+
+    .tab-btn {
+      flex: 1;
+      background: none;
+      border: none;
+      padding: 1rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border-bottom: 2px solid transparent;
+    }
+
+    .tab-btn:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .tab-btn.active {
+      color: var(--accent-primary);
+      border-bottom-color: var(--accent-primary);
+      background: rgba(139, 92, 246, 0.03);
+    }
+
+    .tab-content {
+      padding: 1.5rem;
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* Code Editor Mockup */
+    .scratchpad {
+      width: 100%;
+      height: 250px;
+      background-color: var(--code-bg);
+      border: 1px solid var(--border-dark);
+      border-radius: 8px;
+      color: #f8f8f2;
+      font-family: 'Fira Code', monospace;
+      padding: 1rem;
+      resize: vertical;
+      font-size: 0.95rem;
+      outline: none;
+    }
+
+    .scratchpad:focus {
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 8px var(--accent-primary-glow);
+    }
+
+    .btn-action {
+      background: linear-gradient(135deg, var(--accent-primary), rgba(139, 92, 246, 0.8));
+      color: #fff;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px var(--accent-primary-glow);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-action:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px var(--accent-primary-glow);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--text-main);
+      border: 1px solid var(--border-dark);
+      box-shadow: none;
+    }
+
+    .btn-secondary:hover {
+      background: var(--card-dark);
+      border-color: var(--text-muted);
+      transform: translateY(-2px);
+    }
+
+    /* Diagnostic Code Interactive View */
+    .interactive-code-container {
+      background-color: var(--code-bg);
+      border: 1px solid var(--border-dark);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+
+    .interactive-code-line {
+      display: flex;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      cursor: pointer;
+      position: relative;
+      transition: background-color 0.2s ease;
+      user-select: none;
+    }
+
+    .interactive-code-line:hover {
+      background-color: var(--line-hover);
+    }
+
+    .line-number {
+      width: 45px;
+      text-align: right;
+      padding-right: 1.25rem;
+      color: var(--text-dark);
+      background-color: var(--line-num-bg);
+      user-select: none;
+      border-right: 1px solid var(--border-dark);
+      flex-shrink: 0;
+    }
+
+    .line-content {
+      padding-left: 1.25rem;
+      white-space: pre;
+      color: var(--text-main);
+      flex-grow: 1;
+    }
+
+    /* Diagnostics markers */
+    .interactive-code-line.has-error-revealed {
+      background-color: rgba(239, 68, 68, 0.15);
+    }
+
+    .interactive-code-line.has-error-revealed .line-number {
+      background-color: rgba(239, 68, 68, 0.25);
+      color: #fca5a5;
+      border-right-color: rgba(239, 68, 68, 0.4);
+    }
+
+    .interactive-code-line.no-error-revealed {
+      background-color: rgba(16, 185, 129, 0.05);
+    }
+
+    .corrections-hidden .interactive-code-line {
+      cursor: default;
+    }
+
+    .corrections-hidden .interactive-code-line:hover {
+      background-color: transparent;
+    }
+
+    .error-tooltip {
+      background-color: #7f1d1d;
+      border: 1px solid #ef4444;
+      border-radius: 6px;
+      padding: 0.75rem 1rem;
+      margin: 0.25rem 1.25rem 0.5rem 4.5rem;
+      font-size: 0.85rem;
+      animation: slideDown 0.2s ease-out;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-5px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .error-tooltip .err-title {
+      color: #fca5a5;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+
+    .error-tooltip .err-desc {
+      color: var(--text-main);
+    }
+
+    .error-tooltip .err-correction {
+      margin-top: 0.5rem;
+      padding-top: 0.5rem;
+      border-top: 1px solid rgba(239, 68, 68, 0.3);
+      font-family: 'Fira Code', monospace;
+      color: var(--success);
+    }
+
+    /* Diagnostics Table */
+    .corrections-table-container {
+      margin-top: 2rem;
+      border: 1px solid var(--border-dark);
+      border-radius: 8px;
+      overflow: hidden;
+      display: none;
+    }
+
+    .corrections-table-container.visible {
+      display: block;
+      animation: fadeIn 0.4s ease-out;
+    }
+
+    .corrections-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.9rem;
+    }
+
+    .corrections-table th,
+    .corrections-table td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border-dark);
+    }
+
+    .corrections-table th {
+      background-color: var(--card-dark);
+      color: var(--text-muted);
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.5px;
+    }
+
+    .corrections-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .corrections-table td.col-line {
+      font-family: 'Fira Code', monospace;
+      font-weight: 700;
+      color: var(--accent-secondary);
+    }
+
+    .corrections-table td.col-correction {
+      font-family: 'Fira Code', monospace;
+      color: var(--success);
+    }
+
+    /* Syntax Highlighting Utilities */
+    .c-kw {
+      color: var(--code-keyword);
+      font-weight: 600;
+    }
+
+    .c-ty {
+      color: var(--code-type);
+    }
+
+    .c-fn {
+      color: var(--code-function);
+    }
+
+    .c-str {
+      color: var(--code-string);
+    }
+
+    .c-cm {
+      color: var(--code-comment);
+    }
+
+    .c-num {
+      color: var(--code-number);
+    }
+
+    /* Footer styling */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: var(--text-dark);
+      font-size: 0.8rem;
+      border-top: 1px solid var(--border-dark);
+      margin-top: auto;
+    }
+
+    /* Navigation Drawer button (Mobile) */
+    .menu-toggle {
+      display: none;
+      background: var(--card-dark);
+      border: 1px solid var(--border-dark);
+      color: var(--text-main);
+      padding: 0.5rem;
+      border-radius: 6px;
+      cursor: pointer;
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      z-index: 20;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .app-container {
+        flex-direction: column;
+        height: auto;
+      }
+
+      .sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid var(--border-dark);
+        max-height: 300px;
+      }
+
+      .content-area {
+        padding: 1rem;
+      }
+
+      .io-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Warning Banner -->
+  <div class="ai-warning-bar">
+    <div class="warning-content">
+      <span class="warning-icon"></span>
+      <span class="warning-text">
+        DO NOT USE AI TO SOLVE THIS PRACTICE PROBLEM SET. IF YOU DO, <span class="warning-highlight">YOU ARE NOT
+          PRACTICING BUT AI IS PRACTICING</span>. BE AHEAD OF AI!
+      </span>
+    </div>
+  </div>
+
+  <!-- App Wrapper -->
+  <div class="app-container">
+
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-header" style="display: flex; flex-direction: column; gap: 0.75rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 0.5rem;">
+          <h1>Practice Problem Set 1</h1>
+          <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle Theme"
+            style="background: none; border: 1px solid var(--border-dark); border-radius: 8px; padding: 0.5rem; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; transition: all 0.2s ease; flex-shrink: 0;">
+            <svg id="theme-toggle-icon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Progress Indicator -->
+        <div class="progress-widget">
+          <div class="progress-info">
+            <span>Overall Progress</span>
+            <span id="progress-text">0/10 Solved</span>
+          </div>
+          <div class="progress-bar-container">
+            <div id="progress-bar" class="progress-bar-fill"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Problems List -->
+      <nav class="nav-list">
+        <div class="nav-section-title">Syntax Diagnostics</div>
+        <ul id="syntax-questions-list" style="list-style: none; display: flex; flex-direction: column; gap: 0.25rem;">
+          <!-- Dynamically filled -->
+        </ul>
+
+        <div class="nav-section-title">Programming Problems</div>
+        <ul id="coding-problems-list" style="list-style: none; display: flex; flex-direction: column; gap: 0.25rem;">
+          <!-- Dynamically filled -->
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Main Workspace Content -->
+    <main class="content-area">
+      <div class="problem-wrapper">
+
+        <!-- Main Problem Panel -->
+        <article class="problem-card" id="problem-card">
+          <!-- Dynamically rendered active problem -->
+          <div style="text-align: center; padding: 3rem 0; color: var(--text-muted);">
+            <p>Select a practice problem from the sidebar to begin.</p>
+          </div>
+        </article>
+
+      </div>
+    </main>
+
+  </div>
+
+  <footer>
+    &copy; 2026 C Programming Practice Suite. Remember: The only way to learn programming is to write code yourself.
+    Stay sharp.
+  </footer>
+
+  <script>
+    // Configuration to hide syntax program corrections (set to false to reveal all corrections)
+    const HIDE_CORRECTIONS = true;
+
+    // Problem Data Definition
+    const problems = [
+      // ----------------- SYNTAX DIAGNOSTICS (QUESTIONS 1-5) -----------------
+      {
+        id: "q1",
+        type: "syntax",
+        title: "Question 1 — Find the 3 Errors",
+        difficulty: "easy",
+        difficultyStars: "⭐",
+        description: "Review the C program below. Find the three syntax/compilation errors that prevent it from compiling or running correctly.",
+        codeLines: [
+          { num: 1, text: `<span class="c-kw">#include</span> <span class="c-str">&lt;studio.h&gt;</span>`, hasError: true, errorTitle: "Wrong Header File", errorDesc: "The standard Input/Output library header is stdio.h, not studio.h.", correction: "#include &lt;stdio.h&gt;" },
+          { num: 2, text: "" },
+          { num: 3, text: `<span class="c-ty">int</span> <span class="c-fn">main</span>()` },
+          { num: 4, text: `{` },
+          { num: 5, text: `    <span class="c-ty">int</span> a, b;` },
+          { num: 6, text: "" },
+          { num: 7, text: `    <span class="c-fn">scanf</span>(<span class="c-str">"%d %d"</span>, a, &amp;b);`, hasError: true, errorTitle: "Missing Address-of Operator", errorDesc: "scanf requires the memory addresses of variables to store inputs. Use &amp;a to supply the address of variable 'a'.", correction: "scanf(\"%d %d\", &amp;a, &amp;b);" },
+          { num: 8, text: "" },
+          { num: 9, text: `    <span class="c-fn">printf</span>(<span class="c-str">"Sum = %d"</span>, a + b);` },
+          { num: 10, text: "" },
+          { num: 11, text: `    <span class="c-kw">return</span> <span class="c-num">0</span>`, hasError: true, errorTitle: "Missing Semicolon", errorDesc: "In C, statements must be terminated with a semicolon.", correction: "return 0;" },
+          { num: 12, text: `}` }
+        ],
+        corrections: [
+          { line: 1, error: "Wrong header file", correction: "#include &lt;stdio.h&gt;" },
+          { line: 7, error: "Missing & before variable 'a'", correction: "scanf(\"%d %d\", &amp;a, &amp;b);" },
+          { line: 11, error: "Missing semicolon", correction: "return 0;" }
+        ]
+      },
+      {
+        id: "q2",
+        type: "syntax",
+        title: "Question 2 — Verify Correctness",
+        difficulty: "easy",
+        difficultyStars: "⭐",
+        description: "Review this program. Identify if there are any errors or if the syntax is completely correct.",
+        codeLines: [
+          { num: 1, text: `<span class="c-kw">#include</span> <span class="c-str">&lt;stdio.h&gt;</span>` },
+          { num: 2, text: "" },
+          { num: 3, text: `<span class="c-ty">int</span> <span class="c-fn">main</span>()` },
+          { num: 4, text: `{` },
+          { num: 5, text: `    <span class="c-ty">int</span> num1, num2;` },
+          { num: 6, text: "" },
+          { num: 7, text: `    <span class="c-fn">scanf</span>(<span class="c-str">"%d %d"</span>, &amp;num1, &amp;num2);` },
+          { num: 8, text: "" },
+          { num: 9, text: `    <span class="c-fn">printf</span>(<span class="c-str">"Addition = %d\\n"</span>, num1 + num2);` },
+          { num: 10, text: `    <span class="c-fn">printf</span>(<span class="c-str">"Subtraction = %d\\n"</span>, num1 - num2);` },
+          { num: 11, text: `    <span class="c-fn">printf</span>(<span class="c-str">"Multiplication = %d\\n"</span>, num1 * num2);` },
+          { num: 12, text: `    <span class="c-fn">printf</span>(<span class="c-str">"Division = %d\\n"</span>, num1 / num2);` },
+          { num: 13, text: "" },
+          { num: 14, text: `    <span class="c-kw">return</span> <span class="c-num">0</span>;` },
+          { num: 15, text: `}` }
+        ],
+        corrections: [],
+        correctProgram: true
+      },
+      {
+        id: "q3",
+        type: "syntax",
+        title: "Question 3 — Find the 2 Errors",
+        difficulty: "easy",
+        difficultyStars: "⭐",
+        description: "This basic float input-output program contains 2 syntax errors. Click on the code lines to inspect or use the button below to check your analysis.",
+        codeLines: [
+          { num: 1, text: `<span class="c-kw">#include</span> <span class="c-str">&lt;stdio.h&gt;</span>` },
+          { num: 2, text: "" },
+          { num: 3, text: `<span class="c-ty">int</span> <span class="c-fn">main</span>`, hasError: true, errorTitle: "Missing Parentheses", errorDesc: "The entrypoint function main must be declared with parentheses main() to denote it is a function.", correction: "int main()" },
+          { num: 4, text: `{` },
+          { num: 5, text: `    <span class="c-ty">float</span> price;` },
+          { num: 6, text: "" },
+          { num: 7, text: `    <span class="c-fn">scanf</span>(<span class="c-str">"%f"</span>, &amp;price);` },
+          { num: 8, text: "" },
+          { num: 9, text: `    <span class="c-fn">printf</span>(<span class="c-str">"%d"</span>, price);`, hasError: true, errorTitle: "Wrong Format Specifier", errorDesc: "The variable 'price' is of type float, but the format specifier %d (used for integers) is used. Use %f for decimal floats.", correction: "printf(\"%f\", price);" },
+          { num: 10, text: "" },
+          { num: 11, text: `    <span class="c-kw">return</span> <span class="c-num">0</span>;` },
+          { num: 12, text: `}` }
+        ],
+        corrections: [
+          { line: 3, error: "Missing parentheses on main function", correction: "int main()" },
+          { line: 9, error: "Wrong format specifier for float variable", correction: "printf(\"%f\", price);" }
+        ]
+      },
+      {
+        id: "q4",
+        type: "syntax",
+        title: "Question 4 — Find the 2 Errors",
+        difficulty: "easy",
+        difficultyStars: "⭐",
+        description: "Examine this basic initialization program. Find the 2 syntax/logical errors.",
+        codeLines: [
+          { num: 1, text: `<span class="c-kw">#include</span> <span class="c-str">&lt;stdio.h&gt;</span>` },
+          { num: 2, text: "" },
+          { num: 3, text: `<span class="c-ty">int</span> <span class="c-fn">main</span>()` },
+          { num: 4, text: `{` },
+          { num: 5, text: `    <span class="c-ty">int</span> a;` },
+          { num: 6, text: "" },
+          { num: 7, text: `    a == <span class="c-num">4</span>;`, hasError: true, errorTitle: "Comparison Instead of Assignment", errorDesc: "The double equals sign '==' checks for equality. For assigning a value to a variable, use the single equals sign '='.", correction: "a = 4;" },
+          { num: 8, text: "" },
+          { num: 9, text: `    <span class="c-fn">printf</span>(<span class="c-str">"Value of a = %d"</span>, a)`, hasError: true, errorTitle: "Missing Semicolon", errorDesc: "This statement is missing a terminating semicolon.", correction: "printf(\"Value of a = %d\", a);" },
+          { num: 10, text: "" },
+          { num: 11, text: `    <span class="c-kw">return</span> <span class="c-num">0</span>;` },
+          { num: 12, text: `}` }
+        ],
+        corrections: [
+          { line: 7, error: "Comparison operator (==) used instead of assignment operator (=)", correction: "a = 4;" },
+          { line: 9, error: "Missing semicolon at the end of the line", correction: "printf(\"Value of a = %d\", a);" }
+        ]
+      },
+      {
+        id: "q5",
+        type: "syntax",
+        title: "Question 5 — Challenge (5 Errors)",
+        difficulty: "challenge",
+        difficultyStars: "⭐⭐⭐",
+        description: "This code is riddled with issues. Carefully evaluate the code block to spot all 5 compilation/logic errors.",
+        codeLines: [
+          { num: 1, text: `<span class="c-kw">#include</span> <span class="c-str">&lt;studio.h&gt;</span>`, hasError: true, errorTitle: "Wrong Header File", errorDesc: "The standard output/input library is 'stdio.h', not 'studio.h'.", correction: "#include &lt;stdio.h&gt;" },
+          { num: 2, text: "" },
+          { num: 3, text: `<span class="c-ty">int</span> <span class="c-fn">main</span>`, hasError: true, errorTitle: "Missing Parentheses", errorDesc: "The main function signature must include parentheses main().", correction: "int main()" },
+          { num: 4, text: `{` },
+          { num: 5, text: `    <span class="c-ty">float</span> x, y;` },
+          { num: 6, text: "" },
+          { num: 7, text: `    <span class="c-fn">scanf</span>(<span class="c-str">"%f %f"</span>, x, y);`, hasError: true, errorTitle: "Missing Address-of Operator (&)", errorDesc: "scanf requires the variables to be preceded by '&' to supply their memory addresses.", correction: "scanf(\"%f %f\", &amp;x, &amp;y);" },
+          { num: 8, text: "" },
+          { num: 9, text: `    <span class="c-fn">printf</span>(<span class="c-str">"Total = %d\\n"</span>, x + y)`, hasError: true, errorTitle: "Wrong Format Specifier & Semicolon", errorDesc: "First, x+y is a float sum, so it requires %f (or similar) instead of %d. Second, the line is missing a closing semicolon.", correction: "printf(\"Total = %f\\n\", x + y);" },
+          { num: 10, text: "" },
+          { num: 11, text: `    <span class="c-kw">return</span> <span class="c-num">0</span>`, hasError: true, errorTitle: "Missing Semicolon", errorDesc: "The return statement lacks a terminating semicolon.", correction: "return 0;" },
+          { num: 12, text: `}` }
+        ],
+        corrections: [
+          { line: 1, error: "Wrong header file", correction: "#include &lt;stdio.h&gt;" },
+          { line: 3, error: "Missing parentheses on main function", correction: "int main()" },
+          { line: 7, error: "Missing & in scanf for both variables 'x' and 'y'", correction: "scanf(\"%f %f\", &amp;x, &amp;y);" },
+          { line: 9, error: "Wrong format specifier (%d instead of %f) and missing semicolon at the end of the line", correction: "printf(\"Total = %f\\n\", x + y);" },
+          { line: 11, error: "Missing semicolon after return value", correction: "return 0;" }
+        ]
+      },
+
+      // ----------------- PROGRAMMING PROBLEMS (PROBLEMS 1-5) -----------------
+      {
+        id: "p1",
+        type: "coding",
+        title: "Problem 1 — Sum of Two Numbers",
+        difficulty: "easy",
+        difficultyStars: "⭐ (Very Easy)",
+        description: "Write a C program that takes two integers as input, computes their addition, and prints the resulting sum.",
+        inputDesc: "Two integers A and B separated by space.",
+        outputDesc: "Print the sum of A and B.",
+        testCases: [
+          { input: "10 20", output: "30" },
+          { input: "-5 15", output: "10" },
+          { input: "0 0", output: "0" }
+        ]
+      },
+      {
+        id: "p2",
+        type: "coding",
+        title: "Problem 2 — Rectangle Area and Perimeter",
+        difficulty: "medium",
+        difficultyStars: "⭐⭐",
+        description: "Given the length and width of a rectangle, calculate both the Area and Perimeter.",
+        formula: "Area = Length &times; Width \nPerimeter = 2 &times; (Length + Width)",
+        inputDesc: "Two integers representing Length and Width respectively.",
+        outputDesc: "Print the area and perimeter on separate lines formatted as: \nArea = [Value]\nPerimeter = [Value]",
+        testCases: [
+          { input: "8 5", output: "Area = 40\nPerimeter = 26" },
+          { input: "10 10", output: "Area = 100\nPerimeter = 40" },
+          { input: "12 4", output: "Area = 48\nPerimeter = 32" }
+        ]
+      },
+      {
+        id: "p3",
+        type: "coding",
+        title: "Problem 3 — Circle Measurements",
+        difficulty: "medium",
+        difficultyStars: "⭐⭐",
+        description: "Take the radius of a circle and calculate its Diameter, Circumference, and Area. Use &pi; = 3.1416.",
+        formula: "Diameter = 2 &times; r\nCircumference = 2 &times; &pi; &times; r\nArea = &pi; &times; r&sup2;",
+        inputDesc: "An integer representing the radius r of the circle.",
+        outputDesc: "Print Diameter, Circumference, and Area, formatted to 2 decimal places.",
+        testCases: [
+          { input: "5", output: "Diameter = 10.00\nCircumference = 31.42\nArea = 78.54" },
+          { input: "7", output: "Diameter = 14.00\nCircumference = 43.98\nArea = 153.94" },
+          { input: "10", output: "Diameter = 20.00\nCircumference = 62.83\nArea = 314.16" }
+        ]
+      },
+      {
+        id: "p4",
+        type: "coding",
+        title: "Problem 4 — Celsius to Fahrenheit",
+        difficulty: "easy",
+        difficultyStars: "⭐",
+        description: "Convert a temperature value given in Celsius scale into its Fahrenheit equivalent.",
+        formula: "F = (C &times; 9 / 5) + 32",
+        inputDesc: "A floating-point or integer value representing temperature in Celsius.",
+        outputDesc: "Print the temperature in Fahrenheit formatted to 2 decimal places.",
+        testCases: [
+          { input: "25", output: "77.00" },
+          { input: "0", output: "32.00" },
+          { input: "-40", output: "-40.00" }
+        ]
+      },
+      {
+        id: "p5",
+        type: "coding",
+        title: "Problem 5 — Student Marks",
+        difficulty: "medium",
+        difficultyStars: "⭐⭐",
+        description: "A student has scores in three subjects. Accept these three marks as input, and calculate their total and average score.",
+        inputDesc: "Three space-separated integers representing marks in subject 1, 2, and 3.",
+        outputDesc: "Print the Total marks (integer) and the Average marks (rounded to 2 decimal places).",
+        testCases: [
+          { input: "80 75 90", output: "Total = 245\nAverage = 81.67" },
+          { input: "100 100 100", output: "Total = 300\nAverage = 100.00" },
+          { input: "55 60 58", output: "Total = 173\nAverage = 57.67" }
+        ]
+      }
+    ];
+
+    // Local Storage Progress State Key
+    const STORAGE_KEY = "c_practice_progress_state_v1";
+
+    // Load or initialize progress
+    let progressState = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+
+    // DOM Elements
+    const syntaxListEl = document.getElementById("syntax-questions-list");
+    const codingListEl = document.getElementById("coding-problems-list");
+    const problemCardEl = document.getElementById("problem-card");
+    const progressTextEl = document.getElementById("progress-text");
+    const progressBarEl = document.getElementById("progress-bar");
+
+    let activeProblemId = null;
+
+    // Helper functions
+    function saveProgress() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(progressState));
+      updateProgressUI();
+    }
+
+    function toggleSolved(id) {
+      if (progressState[id]) {
+        delete progressState[id];
+      } else {
+        progressState[id] = "solved";
+      }
+      saveProgress();
+
+      // Update sidebar class
+      const li = document.querySelector(`[data-id="${id}"]`);
+      if (li) {
+        if (progressState[id]) {
+          li.classList.add("completed");
+        } else {
+          li.classList.remove("completed");
+        }
+      }
+    }
+
+    function updateProgressUI() {
+      const solvedCount = Object.keys(progressState).length;
+      const totalCount = problems.length;
+      progressTextEl.textContent = `${solvedCount}/${totalCount} Solved`;
+      const percentage = (solvedCount / totalCount) * 100;
+      progressBarEl.style.width = `${percentage}%`;
+    }
+
+    // Build sidebar navigation links
+    function renderSidebar() {
+      syntaxListEl.innerHTML = "";
+      codingListEl.innerHTML = "";
+
+      problems.forEach(prob => {
+        const li = document.createElement("li");
+        li.className = "nav-item";
+        li.setAttribute("data-id", prob.id);
+        if (progressState[prob.id] === "solved") {
+          li.classList.add("completed");
+        }
+
+        li.innerHTML = `
+          <div class="nav-item-left">
+            <div class="status-dot"></div>
+            <span class="nav-item-title">${prob.title}</span>
+          </div>
+          <span style="font-size: 0.7rem; opacity: 0.5;">
+            ${prob.type === 'syntax' ? 'Debug' : 'Code'}
+          </span>
+        `;
+
+        li.addEventListener("click", () => selectProblem(prob.id));
+
+        if (prob.type === "syntax") {
+          syntaxListEl.appendChild(li);
+        } else {
+          codingListEl.appendChild(li);
+        }
+      });
+    }
+
+    // Select and display a problem
+    function selectProblem(id) {
+      activeProblemId = id;
+
+      // Highlight sidebar item
+      document.querySelectorAll(".nav-item").forEach(item => {
+        item.classList.remove("active");
+        if (item.getAttribute("data-id") === id) {
+          item.classList.add("active");
+        }
+      });
+
+      const prob = problems.find(p => p.id === id);
+      if (!prob) return;
+
+      const isChecked = progressState[id] === "solved" ? "checked" : "";
+
+      let badgeClass = "badge-easy";
+      if (prob.difficulty === "medium") badgeClass = "badge-medium";
+      if (prob.difficulty === "challenge") badgeClass = "badge-challenge";
+
+      let mainHTML = `
+        <div class="problem-header">
+          <div class="problem-title-area">
+            <h2>${prob.title}</h2>
+            <span class="difficulty-badge ${badgeClass}">${prob.difficultyStars}</span>
+          </div>
+          <div class="status-picker">
+            <label>
+              <input type="checkbox" id="mark-solved-chk" ${isChecked} onchange="handleMarkSolved('${prob.id}')">
+              Mark as Solved
+            </label>
+          </div>
+        </div>
+      `;
+
+      if (prob.type === "syntax") {
+        // --- SYNTAX/DEBUG LAYOUT ---
+        mainHTML += `
+          <p class="description">${prob.description}</p>
+          
+          <div class="section-title">Program Code</div>
+          <p style="color: var(--text-dark); font-size: 0.8rem; margin-bottom: 0.5rem; font-style: italic;">
+            ${HIDE_CORRECTIONS ? '💡 Review the code lines below and try to find all errors yourself.' : '💡 Click on any line of code to inspect it for errors.'}
+          </p>
+
+          <div class="interactive-code-container ${HIDE_CORRECTIONS ? 'corrections-hidden' : ''}" id="code-container">
+            ${prob.codeLines.map((line, idx) => `
+              <div class="interactive-code-line" onclick="toggleLineError(${idx}, this)" data-error="${line.hasError ? 'true' : 'false'}">
+                <div class="line-number">${line.num}</div>
+                <div class="line-content">${line.text}</div>
+              </div>
+              ${!HIDE_CORRECTIONS && line.hasError ? `
+                <div class="error-tooltip" id="err-tip-${idx}" style="display: none;">
+                  <div class="err-title">⚠️ Error: ${line.errorTitle}</div>
+                  <div class="err-desc">${line.errorDesc}</div>
+                  <div class="err-correction"><strong>Correction:</strong> <code>${line.correction}</code></div>
+                </div>
+              ` : ''}
+            `).join('')}
+          </div>
+
+          ${HIDE_CORRECTIONS ? '' : `
+          <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+            <button class="btn-action" onclick="revealAllDiagnostics('${prob.id}')">Check Program Corrections</button>
+            ${prob.correctProgram ? '' : `<button class="btn-action btn-secondary" onclick="resetDiagnostics()">Hide Corrections</button>`}
+          </div>
+
+          <div class="corrections-table-container" id="corrections-table-container">
+            <div class="section-title">Expected Corrections</div>
+            ${prob.correctProgram ? `
+              <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid var(--success); padding: 1rem; border-radius: 8px; color: var(--success); font-weight: 600;">
+                ✅ This C program compiles and runs correctly with zero errors!
+              </div>
+            ` : `
+              <table class="corrections-table">
+                <thead>
+                  <tr>
+                    <th style="width: 10%;">Line</th>
+                    <th style="width: 45%;">Error Found</th>
+                    <th style="width: 45%;">Suggested Correction</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${prob.corrections.map(c => `
+                    <tr>
+                      <td class="col-line">${c.line}</td>
+                      <td>${c.error}</td>
+                      <td class="col-correction"><code>${c.correction}</code></td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            `}
+          </div>
+          `}
+        `;
+      } else {
+        // --- CODING PROBLEM LAYOUT ---
+        const formulaBlock = prob.formula ? `
+          <div class="section-title">Formula</div>
+          <div class="formula-box">${prob.formula.replace(/\n/g, '<br>')}</div>
+        ` : '';
+
+        mainHTML += `
+          <p class="description">${prob.description}</p>
+          ${formulaBlock}
+
+          <div class="io-grid">
+            <div class="io-card">
+              <div class="io-card-title">Input Specification</div>
+              <p style="font-size: 0.95rem; line-height: 1.5; color: var(--text-main);">${prob.inputDesc}</p>
+            </div>
+            <div class="io-card">
+              <div class="io-card-title">Output Specification</div>
+              <p style="font-size: 0.95rem; line-height: 1.5; color: var(--text-main);">${prob.outputDesc}</p>
+            </div>
+          </div>
+
+          <div class="section-title">Sample Test Cases</div>
+          <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+            ${prob.testCases.map((tc, index) => `
+              <div style="background: rgba(0,0,0,0.15); border: 1px solid var(--border-dark); border-radius: 12px; padding: 1.25rem;">
+                <div style="font-size: 0.8rem; font-weight: 800; color: var(--accent-secondary); margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 0.5rem;">
+                  <span style="display: inline-block; width: 6px; height: 6px; background-color: var(--accent-secondary); border-radius: 50%;"></span>
+                  Test Case ${index + 1}
+                </div>
+                <div class="io-grid" style="margin-bottom: 0;">
+                  <div class="io-card">
+                    <div class="io-card-title">
+                      Input
+                      <button class="btn-copy" onclick="copyText('sample-in-${prob.id}-${index}')">Copy</button>
+                    </div>
+                    <pre class="code-block" id="sample-in-${prob.id}-${index}">${tc.input}</pre>
+                  </div>
+                  <div class="io-card">
+                    <div class="io-card-title">
+                      Expected Output
+                      <button class="btn-copy" onclick="copyText('sample-out-${prob.id}-${index}')">Copy</button>
+                    </div>
+                    <pre class="code-block" id="sample-out-${prob.id}-${index}">${tc.output}</pre>
+                  </div>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      }
+
+      problemCardEl.innerHTML = mainHTML;
+    }
+
+    // Toggle single line error tooltips
+    window.toggleLineError = function (idx, lineElement) {
+      if (HIDE_CORRECTIONS) return;
+      const tip = document.getElementById(`err-tip-${idx}`);
+      if (tip) {
+        const isHidden = tip.style.display === "none";
+        tip.style.display = isHidden ? "block" : "none";
+
+        if (isHidden) {
+          lineElement.classList.add("has-error-revealed");
+        } else {
+          lineElement.classList.remove("has-error-revealed");
+        }
+      } else {
+        // Line has no error, show quick flash or status
+        lineElement.classList.add("no-error-revealed");
+        setTimeout(() => {
+          lineElement.classList.remove("no-error-revealed");
+        }, 800);
+      }
+    }
+
+    // Check errors button action
+    window.revealAllDiagnostics = function (probId) {
+      const prob = problems.find(p => p.id === probId);
+      if (!prob) return;
+
+      // Reveal all error tooltips
+      prob.codeLines.forEach((line, idx) => {
+        if (line.hasError) {
+          const tip = document.getElementById(`err-tip-${idx}`);
+          if (tip) tip.style.display = "block";
+
+          const lineEl = document.querySelectorAll(".interactive-code-line")[idx];
+          if (lineEl) lineEl.classList.add("has-error-revealed");
+        }
+      });
+
+      // Show table
+      const tblContainer = document.getElementById("corrections-table-container");
+      if (tblContainer) tblContainer.classList.add("visible");
+    }
+
+    // Hide corrections button
+    window.resetDiagnostics = function () {
+      // Hide all error tooltips
+      document.querySelectorAll(".error-tooltip").forEach(tip => {
+        tip.style.display = "none";
+      });
+      document.querySelectorAll(".interactive-code-line").forEach(lineEl => {
+        lineEl.classList.remove("has-error-revealed");
+      });
+      const tblContainer = document.getElementById("corrections-table-container");
+      if (tblContainer) tblContainer.classList.remove("visible");
+    }
+
+    // Tab switcher
+    window.switchTab = function (evt, tabId) {
+      // Declare all variables
+      let i, tabcontent, tablinks;
+
+      // Get all elements with class="tab-content" and hide them
+      tabcontent = document.getElementsByClassName("tab-content");
+      for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].classList.remove("active");
+      }
+
+      // Get all elements with class="tab-btn" and remove the class "active"
+      tablinks = document.getElementsByClassName("tab-btn");
+      for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].classList.remove("active");
+      }
+
+      // Show the current tab, and add an "active" class to the button that opened the tab
+      document.getElementById(tabId).classList.add("active");
+      evt.currentTarget.classList.add("active");
+    }
+
+    // Reveal Solution Code
+    window.revealCodeSolution = function (probId) {
+      const overlay = document.getElementById(`sol-overlay-${probId}`);
+      if (overlay) {
+        overlay.style.display = "none";
+      }
+    }
+
+    // Copy Sample Input/Output text
+    window.copyText = function (elementId) {
+      const el = document.getElementById(elementId);
+      if (!el) return;
+
+      navigator.clipboard.writeText(el.innerText).then(() => {
+        const btn = el.previousElementSibling.querySelector(".btn-copy");
+        if (btn) {
+          const original = btn.textContent;
+          btn.textContent = "Copied!";
+          btn.style.color = "var(--success)";
+          setTimeout(() => {
+            btn.textContent = original;
+            btn.style.color = "var(--accent-secondary)";
+          }, 1500);
+        }
+      });
+    }
+
+    // Save workspace code
+    window.saveScratchpad = function (probId) {
+      const val = document.getElementById(`scratchpad-${probId}`).value;
+      localStorage.setItem(`scratch_${probId}`, val);
+    }
+
+    // Mark as solved checkbox handling
+    window.handleMarkSolved = function (probId) {
+      toggleSolved(probId);
+    }
+
+    // Theme Toggle Logic
+    const themeToggleBtn = document.getElementById("theme-toggle");
+    const themeToggleIcon = document.getElementById("theme-toggle-icon");
+
+    let currentTheme = localStorage.getItem("theme") || "light";
+    document.documentElement.setAttribute("data-theme", currentTheme);
+    updateThemeIcon(currentTheme);
+
+    themeToggleBtn.addEventListener("click", () => {
+      currentTheme = currentTheme === "dark" ? "light" : "dark";
+      document.documentElement.setAttribute("data-theme", currentTheme);
+      localStorage.setItem("theme", currentTheme);
+      updateThemeIcon(currentTheme);
+    });
+
+    function updateThemeIcon(theme) {
+      if (theme === "light") {
+        themeToggleIcon.innerHTML = `
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        `;
+      } else {
+        themeToggleIcon.innerHTML = `
+          <circle cx="12" cy="12" r="5"></circle>
+          <line x1="12" y1="1" x2="12" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="23"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+          <line x1="1" y1="12" x2="3" y2="12"></line>
+          <line x1="21" y1="12" x2="23" y2="12"></line>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        `;
+      }
+    }
+
+    // Start App
+    function init() {
+      renderSidebar();
+      updateProgressUI();
+
+      // Auto-select first syntax question
+      if (problems.length > 0) {
+        selectProblem(problems[0].id);
+      }
+    }
+
+    init();
+  </script>
+</body>
+
+</html>
