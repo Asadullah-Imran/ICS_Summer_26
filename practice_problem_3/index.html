@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Practice Problem Set 3 - Conditional Statements & Type Casting</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f8fafc;
+            --surface-color: #ffffff;
+            --surface-color-light: #f1f5f9;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --accent-primary: #6d28d9;
+            --accent-secondary: #0891b2;
+            --border-color: #cbd5e1;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --header-bg: rgba(255, 255, 255, 0.8);
+            --desc-bg: rgba(0,0,0,0.03);
+            --code-text: #1e293b;
+            --sol-bg: #f1f5f9;
+            --sol-text: #334155;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #0f111a;
+            --surface-color: #1a1d2d;
+            --surface-color-light: #252a3f;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent-primary: #8b5cf6;
+            --accent-secondary: #06b6d4;
+            --border-color: #2e344e;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --header-bg: rgba(26, 29, 45, 0.8);
+            --desc-bg: rgba(0,0,0,0.2);
+            --code-text: #e2e8f0;
+            --sol-bg: #0d0f17;
+            --sol-text: #a5b4fc;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-color);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 4px;
+        }
+
+        header {
+            background: var(--header-bg);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1.5rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        header h1 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent-secondary), var(--accent-primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 100px;
+            height: calc(100vh - 120px);
+            overflow-y: auto;
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+        }
+
+        .sidebar h3 {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .problem-link {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            transition: all 0.2s;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .problem-link:hover {
+            background: var(--surface-color-light);
+            color: var(--text-main);
+            transform: translateX(4px);
+        }
+
+        .problem-link.active {
+            background: var(--surface-color-light);
+            color: var(--accent-primary);
+            font-weight: 700;
+            border-left: 4px solid var(--accent-primary);
+            transform: translateX(4px);
+        }
+
+        .problem-card {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+            scroll-margin-top: 120px;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .problem-card h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-main);
+        }
+
+        .problem-desc {
+            color: var(--text-muted);
+            white-space: pre-wrap;
+            margin-bottom: 2rem;
+            background: var(--desc-bg);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border-left: 4px solid var(--accent-primary);
+        }
+
+        .highlight-rule {
+            background-color: rgba(16, 185, 129, 0.1);
+            border-left: 4px solid var(--success);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+
+        .highlight-important {
+            background-color: rgba(245, 158, 11, 0.1);
+            border-left: 4px solid var(--warning);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+
+        .io-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .io-box {
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1rem;
+        }
+
+        .io-box h4 {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            color: var(--accent-secondary);
+            margin-bottom: 0.75rem;
+            letter-spacing: 0.5px;
+        }
+
+        pre {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--code-text);
+            white-space: pre-wrap;
+        }
+
+        .solution-btn {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .solution-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .solution-btn:disabled {
+            background: var(--surface-color-light);
+            color: var(--text-muted);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .solution-content {
+            display: none;
+            margin-top: 1.5rem;
+            background: var(--sol-bg);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            overflow-x: auto;
+        }
+
+        .solution-content.show {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .solution-content pre {
+            color: var(--sol-text);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .countdown-alert {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid var(--warning);
+            color: var(--warning);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-weight: 500;
+        }
+
+        @media (max-width: 900px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            .sidebar {
+                position: relative;
+                top: 0;
+                height: auto;
+            }
+            .io-section {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header style="display: flex; justify-content: space-between; align-items: center;">
+        <h1>Practice Problem Set 3</h1>
+        <button id="theme-toggle" style="background: var(--surface-color-light); color: var(--text-main); border: 1px solid var(--border-color); padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; font-weight: 600; font-family: 'Inter', sans-serif;">🌓 Toggle Theme</button>
+    </header>
+
+    <div class="container">
+        <aside class="sidebar">
+            <h3>Problems</h3>
+            <div id="nav-links">
+                <!-- Links injected via JS -->
+            </div>
+        </aside>
+
+        <main>
+            <div class="countdown-alert" id="countdown-alert">
+                <span>🕒</span>
+                <span id="countdown-text">Solutions will be revealed on September 8, 2026, 11:00 PM BDT.</span>
+            </div>
+
+            <div id="problems-container">
+                <!-- Problems injected via JS -->
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const themeBtn = document.getElementById('theme-toggle');
+        themeBtn.addEventListener('click', () => {
+            if (document.documentElement.getAttribute('data-theme') === 'dark') {
+                document.documentElement.removeAttribute('data-theme');
+                try { localStorage.setItem('theme', 'light'); } catch (e) {}
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                try { localStorage.setItem('theme', 'dark'); } catch (e) {}
+            }
+        });
+
+        try {
+            if (localStorage.getItem('theme') === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        } catch (e) {}
+
+        const releaseDate = new Date('2026-09-08T23:00:00+06:00'); // Locked until Sep 8, 11 PM BDT
+        
+        const problems = [{"id": 1, "title": "University Exam Result", "description": "A university wants to create a simple system to determine whether a student is eligible to receive a course completion certificate.\n\nThe student provides:\n- Final exam marks\n- Attendance percentage\n\nThe university follows these rules:\n- A student must score at least 40 marks in the final exam and have at least 75% attendance to pass the course.\n- If both conditions are satisfied, display Course Completed.\n- Otherwise, display Course Not Completed.\n\nHint: You need to choose between the && and || operators.", "ios": [{"in": "Marks: 60\nAttendance: 85", "out": "Course Completed"}, {"in": "Marks: 35\nAttendance: 90", "out": "Course Not Completed"}, {"in": "Marks: 50\nAttendance: 70", "out": "Course Not Completed"}], "solution": "#include <stdio.h>\n\nint main() {\n    int marks, attendance;\n    \n    // Read marks and attendance from the user\n    scanf(\"%d %d\", &marks, &attendance);\n\n    // Check if BOTH conditions are met using &&\n    if (marks >= 40 && attendance >= 75) {\n        printf(\"Course Completed\\n\");\n    } else {\n        // If either condition fails, display not completed\n        printf(\"Course Not Completed\\n\");\n    }\n\n    return 0;\n}"}, {"id": 2, "title": "ATM Withdrawal Verification", "description": "A bank wants to implement a simple ATM withdrawal verification system.\n\nWhen a customer requests a withdrawal, the system receives:\n- Current account balance\n- Withdrawal amount\n\nThe bank allows a withdrawal only when:\n- The withdrawal amount is greater than 0, and\n- The withdrawal amount is less than or equal to the available balance.\n\nIf both conditions are satisfied, display: Withdrawal Approved\nOtherwise, display: Withdrawal Denied\n\nHint: Use the && or || operator appropriately.", "ios": [{"in": "Balance: 5000\nWithdrawal: 2000", "out": "Withdrawal Approved"}, {"in": "Balance: 3000\nWithdrawal: 3500", "out": "Withdrawal Denied"}, {"in": "Balance: 4000\nWithdrawal: -500", "out": "Withdrawal Denied"}], "solution": "#include <stdio.h>\n\nint main() {\n    int balance, withdrawal;\n    \n    // Read balance and withdrawal amount\n    scanf(\"%d %d\", &balance, &withdrawal);\n\n    // The withdrawal must be positive AND not exceed the balance\n    if (withdrawal > 0 && withdrawal <= balance) {\n        printf(\"Withdrawal Approved\\n\");\n    } else {\n        printf(\"Withdrawal Denied\\n\");\n    }\n\n    return 0;\n}"}, {"id": 3, "title": "University Club Eligibility", "description": "A university is selecting students for a programming club.\n\nA student can join the club if they satisfy at least one of the following conditions:\n- Their programming contest score is 80 or higher, OR\n- Their GPA is 3.75 or higher\n\nTake the student's contest score and GPA as input.\n\nIf the student satisfies either condition, display: Eligible for Programming Club\nOtherwise, display: Not Eligible\n\nHint: Decide whether you need the && or || operator here.", "ios": [{"in": "Score: 85\nGPA: 3.60", "out": "Eligible for Programming Club"}, {"in": "Score: 70\nGPA: 3.80", "out": "Eligible for Programming Club"}, {"in": "Score: 75\nGPA: 3.50", "out": "Not Eligible"}], "solution": "#include <stdio.h>\n\nint main() {\n    int score;\n    float gpa;\n    \n    // Read the contest score and GPA\n    scanf(\"%d %f\", &score, &gpa);\n\n    // The student only needs to meet ONE of the conditions, so we use || (OR)\n    if (score >= 80 || gpa >= 3.75) {\n        printf(\"Eligible for Programming Club\\n\");\n    } else {\n        printf(\"Not Eligible\\n\");\n    }\n\n    return 0;\n}"}, {"id": 4, "title": "Scholarship Category", "description": "A university wants to automatically determine whether a student qualifies for a merit scholarship.\n\nThe university has the following rules:\n- A student qualifies if their GPA is 3.80 or higher.\n- OR if their GPA is between 3.50 and 3.79 AND their total marks are 80 or higher.\n\nTake the student's GPA and total marks as input.\n\nDisplay:\nScholarship Eligible if the student satisfies either requirement.\nScholarship Not Eligible otherwise.\n\nHint: You will need to carefully combine && and || operators.\nImportant: Do not use nested if-else.", "ios": [{"in": "GPA: 3.85\nMarks: 75", "out": "Scholarship Eligible"}, {"in": "GPA: 3.60\nMarks: 85", "out": "Scholarship Eligible"}, {"in": "GPA: 3.60\nMarks: 75", "out": "Scholarship Not Eligible"}, {"in": "GPA: 3.40\nMarks: 90", "out": "Scholarship Not Eligible"}], "solution": "#include <stdio.h>\n\nint main() {\n    float gpa;\n    int marks;\n    \n    // Read GPA and marks\n    scanf(\"%f %d\", &gpa, &marks);\n\n    // Condition 1: gpa >= 3.80\n    // Condition 2: gpa is between 3.50 and 3.79 AND marks >= 80\n    // We combine Condition 1 OR Condition 2\n    if (gpa >= 3.80 || (gpa >= 3.50 && gpa <= 3.79 && marks >= 80)) {\n        printf(\"Scholarship Eligible\\n\");\n    } else {\n        printf(\"Scholarship Not Eligible\\n\");\n    }\n\n    return 0;\n}"}, {"id": 5, "title": "Online Store Delivery Eligibility", "description": "An online shopping company offers free delivery to customers under certain conditions.\n\nA customer provides:\n- Order amount\n- Customer membership status\n\nThe membership status is entered as:\nY \u2192 Premium Member\nN \u2192 Regular Customer\n\nFree delivery is available when:\n- The order amount is \u09f32,000 or more, OR\n- The customer is a Premium Member AND the order amount is \u09f31,000 or more.\n\nOtherwise, the customer must pay a delivery charge.\n\nDisplay:\nFree Delivery\nor\nDelivery Charge Applicable\n\nHint: You will need to use ==, &&, and || where appropriate.\nImportant: Do not use nested conditions.", "ios": [{"in": "Amount: 2500\nStatus: N", "out": "Free Delivery"}, {"in": "Amount: 1500\nStatus: Y", "out": "Free Delivery"}, {"in": "Amount: 1500\nStatus: N", "out": "Delivery Charge Applicable"}, {"in": "Amount: 800\nStatus: Y", "out": "Delivery Charge Applicable"}], "solution": "#include <stdio.h>\n\nint main() {\n    int amount;\n    char status;\n    \n    // Read amount and status. Note the space before %c to ignore any newlines\n    scanf(\"%d %c\", &amount, &status);\n\n    // Free delivery if amount >= 2000 OR (status is 'Y' AND amount >= 1000)\n    if (amount >= 2000 || (status == 'Y' && amount >= 1000)) {\n        printf(\"Free Delivery\\n\");\n    } else {\n        printf(\"Delivery Charge Applicable\\n\");\n    }\n\n    return 0;\n}"}, {"id": 6, "title": "Student Average Calculator", "description": "A university stores students' marks as integers.\n\nA student has marks in three courses. The program takes the three marks as int values and calculates their average.\n\nWrite a C program to calculate the average. Your program <b>MUST take the inputs and declare them strictly as integers (int), and output the result as a floating-point value (float).</b>\n\nFormula:\nAverage = (Mark1 + Mark2 + Mark3) / 3\n\nHint: You will need to use type casting to ensure the division produces a floating-point result instead of losing the decimal portion.\n\nDisplay the average up to 2 decimal places.\n\nExpected output format:\nAverage: 84.67", "ios": [{"in": "Marks: 78 85 91", "out": "Average: 84.67"}, {"in": "Marks: 80 80 81", "out": "Average: 80.33"}], "solution": "#include <stdio.h>\n\nint main() {\n    int m1, m2, m3;\n    float average;\n    \n    // Read the three integer marks\n    scanf(\"%d %d %d\", &m1, &m2, &m3);\n    \n    // Type cast the sum to (float) BEFORE division \n    // This prevents C from doing integer division and losing the decimal part\n    average = (float)(m1 + m2 + m3) / 3;\n    \n    // Print the average to 2 decimal places\n    printf(\"Average: %.2f\\n\", average);\n\n    return 0;\n}"}, {"id": 7, "title": "Electricity Consumption Average", "description": "An electricity monitoring system records the electricity consumption of a household for three months.\n\nThe consumption values are stored as integers because the electricity meter records whole units.\n\nThe program takes the consumption of the three months as input and calculates the average monthly consumption.\n\nThe company wants the result displayed as a floating-point value with 2 digits after the decimal point.\n\nWrite a C program to calculate the average consumption. Your program <b>MUST take the inputs and declare them strictly as integers (int), and output the result as a floating-point value (float).</b>\n\nFormula:\nAverage Consumption = (Month1 + Month2 + Month3) / 3\n\nHint: You will need to use type casting on the integers before dividing to get an accurate floating-point result.\n\nDisplay:\nAverage Consumption: 135.00 units", "ios": [{"in": "Months: 125 138 142", "out": "Average Consumption: 135.00 units"}, {"in": "Months: 110 120 125", "out": "Average Consumption: 118.33 units"}], "solution": "#include <stdio.h>\n\nint main() {\n    int m1, m2, m3;\n    float average;\n    \n    // Read the three months' integer consumption values\n    scanf(\"%d %d %d\", &m1, &m2, &m3);\n    \n    // We must type cast to (float) so the division gives a fractional result\n    average = (float)(m1 + m2 + m3) / 3;\n    \n    // Print the result to 2 decimal places\n    printf(\"Average Consumption: %.2f units\\n\", average);\n\n    return 0;\n}"}];
+
+        function renderProblems() {
+            const navContainer = document.getElementById('nav-links');
+            const problemsContainer = document.getElementById('problems-container');
+
+            problems.forEach(p => {
+                // Sidebar Link
+                const link = document.createElement('a');
+                link.href = `#problem-${p.id}`;
+                link.className = 'problem-link';
+                link.textContent = `${p.id}. ${p.title}`;
+                navContainer.appendChild(link);
+
+                // Problem Card
+                let iosHtml = '';
+                p.ios.forEach((io, index) => {
+                    iosHtml += `
+                        <div class="io-section">
+                            <div class="io-box">
+                                <h4>Test Case ${index + 1} - Input</h4>
+                                <pre>${io.in}</pre>
+                            </div>
+                            <div class="io-box">
+                                <h4>Test Case ${index + 1} - Expected Output</h4>
+                                <pre>${io.out}</pre>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                let formattedDesc = p.description;
+                formattedDesc = formattedDesc.replace(/(The university follows these rules:|The bank allows a withdrawal only when:|A student can join the club if they satisfy at least one of the following conditions:|The university has the following rules:|Free delivery is available when:|Formula:)([\s\S]*?)(?=\n\n|\nTask:|\nDisplay:|$)/g, '<div class="highlight-rule"><b>$1</b>$2</div>');
+                formattedDesc = formattedDesc.replace(/(Hint:|Important:)([\s\S]*?)(?=\n\n|$)/g, '<div class="highlight-important"><b>$1</b>$2</div>');
+
+                const card = document.createElement('div');
+                card.className = 'problem-card';
+                card.id = `problem-${p.id}`;
+                card.innerHTML = `
+                    <h2>${p.id}. ${p.title}</h2>
+                    <div class="problem-desc">${formattedDesc}</div>
+                    ${iosHtml}
+                    <button class="solution-btn" onclick="toggleSolution(${p.id})" id="btn-${p.id}">
+                        View Solution Code
+                    </button>
+                    <div class="solution-content" id="sol-${p.id}">
+                        <pre><code>${p.solution.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</code></pre>
+                    </div>
+                `;
+                problemsContainer.appendChild(card);
+            });
+            
+            const observerOptions = {
+                root: null,
+                rootMargin: '-20% 0px -60% 0px',
+                threshold: 0
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const id = entry.target.id;
+                        document.querySelectorAll('.problem-link').forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href') === `#${id}`) {
+                                link.classList.add('active');
+                                link.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                            }
+                        });
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.problem-card').forEach(card => {
+                observer.observe(card);
+            });
+            
+            checkRelease();
+            setInterval(checkRelease, 1000);
+        }
+
+        function toggleSolution(id) {
+            if (new Date() < releaseDate) {
+                alert("Solutions are locked until September 8, 2026, 11:00 PM BDT.");
+                return;
+            }
+            const sol = document.getElementById(`sol-${id}`);
+            sol.classList.toggle('show');
+        }
+
+        function checkRelease() {
+            const now = new Date();
+            const alertBox = document.getElementById('countdown-alert');
+            const countdownText = document.getElementById('countdown-text');
+            
+            if (now >= releaseDate) {
+                alertBox.style.display = 'none';
+                document.querySelectorAll('.solution-btn').forEach(btn => {
+                    btn.disabled = false;
+                    btn.innerHTML = '✨ View Solution Code';
+                });
+            } else {
+                alertBox.style.display = 'flex';
+                
+                const timeDiff = releaseDate - now;
+                const hours = Math.floor(timeDiff / (1000 * 60 * 60));
+                const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+                
+                if (countdownText) {
+                    countdownText.textContent = `Solutions will be revealed in ${hours}h ${minutes}m ${seconds}s.`;
+                }
+
+                document.querySelectorAll('.solution-btn').forEach(btn => {
+                    btn.disabled = true;
+                    btn.innerHTML = '🔒 Solution Locked';
+                });
+            }
+        }
+
+        renderProblems();
+    </script>
+</body>
+</html>
