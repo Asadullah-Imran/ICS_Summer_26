@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ICS Summer 2026 - Practice Problems</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f8fafc;
+            --text-color: #0f172a;
+            --card-bg: #ffffff;
+            --primary: #3b82f6;
+            --primary-hover: #2563eb;
+            --accent: #8b5cf6;
+            --border: #e2e8f0;
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --hover-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --gradient-1: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            --badge-bg: #eff6ff;
+            --badge-text: #1d4ed8;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #0f172a;
+            --text-color: #f8fafc;
+            --card-bg: #1e293b;
+            --primary: #60a5fa;
+            --primary-hover: #3b82f6;
+            --accent: #a78bfa;
+            --border: #334155;
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+            --hover-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.6), 0 10px 10px -5px rgba(0, 0, 0, 0.4);
+            --badge-bg: #1e3a8a;
+            --badge-text: #bfdbfe;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* Abstract Background Shapes */
+        .bg-shape {
+            position: absolute;
+            filter: blur(100px);
+            z-index: -1;
+            opacity: 0.5;
+            animation: float 20s infinite ease-in-out alternate;
+        }
+        
+        .shape-1 {
+            width: 500px;
+            height: 500px;
+            background: rgba(59, 130, 246, 0.3);
+            border-radius: 50%;
+            top: -100px;
+            left: -100px;
+        }
+        
+        .shape-2 {
+            width: 600px;
+            height: 600px;
+            background: rgba(139, 92, 246, 0.3);
+            border-radius: 50%;
+            bottom: -150px;
+            right: -100px;
+            animation-delay: -10s;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(50px, 50px) rotate(180deg); }
+            100% { transform: translate(-50px, -50px) rotate(360deg); }
+        }
+
+        header {
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            background: rgba(var(--card-bg), 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        #theme-toggle {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            color: var(--text-color);
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-weight: 500;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: var(--card-shadow);
+        }
+
+        #theme-toggle:hover {
+            border-color: var(--primary);
+            transform: translateY(-1px);
+        }
+
+        main {
+            flex: 1;
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 5rem;
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+            letter-spacing: -1px;
+        }
+        
+        .hero h1 span {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-color);
+            opacity: 0.8;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--card-shadow);
+            position: relative;
+            overflow: hidden;
+            transform: translateY(0);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: slideUp 0.8s ease-out forwards;
+            opacity: 0;
+        }
+
+        .card:nth-child(1) { animation-delay: 0.1s; }
+        .card:nth-child(2) { animation-delay: 0.2s; }
+        .card:nth-child(3) { animation-delay: 0.3s; }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-1);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--hover-shadow);
+            border-color: transparent;
+        }
+
+        .card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-number {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--text-color);
+            opacity: 0.1;
+            line-height: 1;
+            margin: -0.5rem 0 0 -0.5rem;
+            transition: opacity 0.3s ease;
+        }
+        
+        .card:hover .card-number {
+            opacity: 0.2;
+            color: var(--primary);
+        }
+
+        .badge {
+            background: var(--badge-bg);
+            color: var(--badge-text);
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .card h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            line-height: 1.3;
+        }
+
+        .card p {
+            color: var(--text-color);
+            opacity: 0.7;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+            flex: 1;
+        }
+
+        .card-footer {
+            margin-top: auto;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 1rem;
+            background: var(--bg-color);
+            color: var(--text-color);
+            text-decoration: none;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover .btn {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .btn svg {
+            margin-left: 0.5rem;
+            width: 18px;
+            height: 18px;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover .btn svg {
+            transform: translateX(4px);
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            border-top: 1px solid var(--border);
+            color: var(--text-color);
+            opacity: 0.6;
+            font-size: 0.875rem;
+            margin-top: auto;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            main { padding: 2rem 1.5rem; }
+            .grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-shape shape-1"></div>
+    <div class="bg-shape shape-2"></div>
+
+    <header>
+        <div class="logo">ICS Summer '26</div>
+        <button id="theme-toggle">
+            <span id="theme-icon">☀️</span>
+            <span id="theme-text">Light Mode</span>
+        </button>
+    </header>
+
+    <main>
+        <div class="hero">
+            <h1>Introduction to Computer Science<br><span>Practice Hub</span></h1>
+            <p>Master your C programming skills with structured, progressive problem sets designed for the Summer 2026 semester.</p>
+        </div>
+
+        <div class="grid">
+            <!-- Problem Set 1 -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-number">01</div>
+                    <span class="badge">Beginner</span>
+                </div>
+                <h2>Basic Output & Variables</h2>
+                <p>Start your journey with standard output (`printf`), escape sequences, comments, format specifiers, basic variable declaration, and simple calculations.</p>
+                <div class="card-footer">
+                    <a href="./practice_problem_1/index.html" class="btn">
+                        Start Practice
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Problem Set 2 -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-number">02</div>
+                    <span class="badge">Intermediate</span>
+                </div>
+                <h2>Conditions & Logic</h2>
+                <p>Learn how to make decisions in code using `if-else` statements, relational operators, nested conditions, and boolean logic to solve real-world scenarios.</p>
+                <div class="card-footer">
+                    <a href="./practice_problem_2/index.html" class="btn">
+                        Start Practice
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Problem Set 3 -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-number">03</div>
+                    <span class="badge">Advanced</span>
+                </div>
+                <h2>Logical Operators & Type Casting</h2>
+                <p>Master complex decision making with logical AND (`&&`), logical OR (`||`), and understand data precision through explicit type casting (`float`).</p>
+                <div class="card-footer">
+                    <a href="./practice_problem_3/index.html" class="btn">
+                        Start Practice
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        &copy; 2026 ICS Summer Semester. All rights reserved.
+    </footer>
+
+    <script>
+        const themeBtn = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+        const themeText = document.getElementById('theme-text');
+
+        function updateThemeBtn(isDark) {
+            if (isDark) {
+                themeIcon.textContent = '🌙';
+                themeText.textContent = 'Dark Mode';
+            } else {
+                themeIcon.textContent = '☀️';
+                themeText.textContent = 'Light Mode';
+            }
+        }
+
+        // Initialize theme
+        try {
+            const savedTheme = localStorage.getItem('hub-theme');
+            if (savedTheme === 'light') {
+                document.documentElement.removeAttribute('data-theme');
+                updateThemeBtn(false);
+            } else {
+                // Default to dark
+                document.documentElement.setAttribute('data-theme', 'dark');
+                updateThemeBtn(true);
+            }
+        } catch (e) {
+            // Fallback for strict environments
+            document.documentElement.setAttribute('data-theme', 'dark');
+            updateThemeBtn(true);
+        }
+
+        themeBtn.addEventListener('click', () => {
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            if (isDark) {
+                document.documentElement.removeAttribute('data-theme');
+                updateThemeBtn(false);
+                try { localStorage.setItem('hub-theme', 'light'); } catch(e) {}
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                updateThemeBtn(true);
+                try { localStorage.setItem('hub-theme', 'dark'); } catch(e) {}
+            }
+        });
+    </script>
+</body>
+</html>
